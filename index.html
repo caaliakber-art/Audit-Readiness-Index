@@ -3,884 +3,1157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ready for Scrutiny 2.0? — Audit Confidence Index</title>
+<title>Ready for Scrutiny 2.0? — SDU Audit Confidence Index</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --sdu-navy:#294262;
+  --sdu-dark:#0D182A;
+  --sdu-accent:#00A0D2;
+  --sdu-accent2:#204262;
+  --sdu-light:#F0F2F5;
+  --sdu-border:#D7DADD;
+  --sdu-border-mid:#B8BEC6;
+  --sdu-white:#FFFFFF;
+  --sdu-text:#1C2535;
+  --sdu-muted:#6B7A94;
+  --red:#B03030;--red-l:#FDF0F0;--red-b:#E8C0C0;
+  --amber:#9A5E08;--amber-l:#FDF4E4;--amber-b:#E8C070;
+  --green:#1A6838;--green-l:#EEF7F1;--green-b:#8ECBA4;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--sdu-light);color:var(--sdu-text);min-height:100vh;}
 
-  :root {
-    --navy: #1F3864;
-    --navy-mid: #2E4E7E;
-    --gold: #C9A84C;
-    --gold-light: #DFC080;
-    --white: #ffffff;
-    --off-white: #F4F7FA;
-    --slate: #374151;
-    --silver: #8A9AB0;
-    --red: #C0392B;
-    --red-light: #FDEAEA;
-    --amber: #BA7517;
-    --amber-light: #FEF3CD;
-    --green: #1E8449;
-    --green-light: #E2EFDA;
-    --blue: #185FA5;
-    --blue-light: #D6E4F0;
-    --border: #DDE3EC;
-  }
+/* ── HEADER ── */
+.site-header{background:var(--sdu-dark);}
+.hdr-inner{max-width:940px;margin:0 auto;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--off-white);
-    color: var(--slate);
-    min-height: 100vh;
-  }
+/* SDU WORDMARK — exact replica */
+.sdu-wordmark{display:flex;flex-direction:column;gap:0;text-align:right;}
+.wm-line1{font-size:14px;font-weight:800;color:var(--sdu-white);letter-spacing:2px;line-height:1.2;text-transform:uppercase;}
+.wm-line2{font-size:14px;font-weight:800;color:var(--sdu-white);letter-spacing:2px;line-height:1.2;text-transform:uppercase;}
+.wm-line3{font-size:9px;font-weight:500;color:rgba(255,255,255,0.45);letter-spacing:3.5px;text-transform:uppercase;margin-top:3px;}
 
-  /* ── Header ── */
-  .site-header {
-    background: var(--navy);
-    padding: 0;
-  }
-  .header-inner {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 28px 24px 24px;
-  }
-  .header-eyebrow {
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: var(--gold);
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .header-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 6px;
-    line-height: 1.2;
-  }
-  .header-sub {
-    font-size: 14px;
-    color: var(--silver);
-    font-style: italic;
-  }
-  .header-gold-bar {
-    height: 4px;
-    background: var(--gold);
-  }
+.hdr-right{text-align:right;}
+.hdr-title{font-size:17px;font-weight:700;color:var(--sdu-white);letter-spacing:-0.2px;}
+.hdr-sub{font-size:11px;color:rgba(0,160,210,0.85);margin-top:2px;letter-spacing:1px;text-transform:uppercase;font-weight:600;}
 
-  /* ── Main container ── */
-  .container {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 32px 24px 60px;
-  }
+/* dark header strip */
+.hdr-strip{background:var(--sdu-dark);padding:7px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.hdr-strip-max{max-width:940px;margin:0 auto;width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.hs-left{font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:0.3px;}
+.hs-right{font-size:11px;color:var(--sdu-accent);letter-spacing:1px;font-weight:600;text-transform:uppercase;}
 
-  /* ── Progress ── */
-  .progress-wrap {
-    margin-bottom: 28px;
-  }
-  .progress-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--silver);
-    margin-bottom: 6px;
-  }
-  .progress-track {
-    height: 5px;
-    background: var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--navy), var(--gold));
-    border-radius: 3px;
-    transition: width 0.4s ease;
-  }
+.container{max-width:940px;margin:0 auto;padding:32px 28px 70px;}
+.section{display:none;}
+.section.active{display:block;}
 
-  /* ── Question card ── */
-  .q-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    margin-bottom: 20px;
-  }
-  .q-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-  }
-  .q-matrix-tag {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    border: 1px solid;
-  }
-  .q-tone-tag {
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
-  .tone-p { background: #E2EFDA; color: #1E5631; border: 1px solid #A8D5B5; }
-  .tone-r { background: #FDEAEA; color: #7B1A1A; border: 1px solid #F5C4C4; }
+/* ── INTAKE ── */
+.intake-wrap{background:var(--sdu-white);border:1px solid var(--sdu-border);border-radius:12px;overflow:hidden;}
+.intake-hero{background:var(--sdu-dark);padding:32px;}
+.ih-label{font-size:10px;letter-spacing:3px;color:var(--sdu-accent);font-weight:700;text-transform:uppercase;margin-bottom:10px;}
+.ih-title{font-size:22px;font-weight:700;color:var(--sdu-white);line-height:1.3;margin-bottom:10px;}
+.ih-body{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;}
+.intake-form{padding:32px;}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.fg-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;}
+.fl{font-size:11px;font-weight:700;color:var(--sdu-navy);letter-spacing:0.8px;text-transform:uppercase;}
+.fl span{color:var(--red);}
+.fi,.fs{padding:11px 14px;border:1.5px solid var(--sdu-border-mid);border-radius:8px;font-size:14px;color:var(--sdu-text);background:var(--sdu-white);font-family:inherit;transition:border-color 0.15s;width:100%;}
+.fi:focus,.fs:focus{outline:none;border-color:var(--sdu-navy);}
+.fi::placeholder{color:#b0bac8;}
+.start-btn{width:100%;margin-top:8px;padding:14px;background:var(--sdu-dark);color:var(--sdu-white);border:none;border-radius:9px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:0.2px;transition:background 0.15s;}
+.start-btn:hover{background:var(--sdu-navy);}
+.intake-foot{margin-top:14px;text-align:center;font-size:12px;color:var(--sdu-muted);font-style:italic;}
 
-  .q-text {
-    font-size: 16px;
-    line-height: 1.65;
-    color: var(--navy);
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-  .q-note {
-    font-size: 12px;
-    color: var(--silver);
-    font-style: italic;
-    margin-bottom: 20px;
-  }
+/* ── PROGRESS ── */
+.prog-wrap{margin-bottom:24px;}
+.prog-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--sdu-muted);margin-bottom:7px;}
+.prog-track{height:4px;background:var(--sdu-border);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--sdu-dark),var(--sdu-accent));border-radius:2px;transition:width 0.4s ease;}
 
-  .options { display: flex; flex-direction: column; gap: 8px; }
-  .option-btn {
-    width: 100%;
-    text-align: left;
-    padding: 13px 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--off-white);
-    color: var(--slate);
-    font-size: 14px;
-    line-height: 1.5;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: inherit;
-  }
-  .option-btn:hover { border-color: var(--navy); background: #EBF0FA; }
-  .option-btn.selected { border-color: var(--navy); background: #EBF0FA; color: var(--navy); font-weight: 500; }
+/* ── QUESTION ── */
+.q-card{background:var(--sdu-white);border:1px solid var(--sdu-border);border-radius:12px;padding:34px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+.q-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+.q-badge{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--sdu-muted);background:var(--sdu-light);padding:6px 14px;border-radius:20px;border:1px solid var(--sdu-border);}
+.q-pct{font-size:12px;color:var(--sdu-muted);}
+.q-text{font-size:16px;line-height:1.75;color:var(--sdu-dark);font-weight:500;margin-bottom:10px;}
+.q-note{font-size:12.5px;color:var(--sdu-muted);font-style:italic;margin-bottom:24px;padding:10px 14px;background:var(--sdu-light);border-radius:7px;border-left:3px solid var(--sdu-border-mid);line-height:1.55;}
+.opts{display:flex;flex-direction:column;gap:9px;}
+.opt{width:100%;text-align:left;padding:13px 18px;border:1.5px solid var(--sdu-border);border-radius:9px;background:var(--sdu-light);color:var(--sdu-text);font-size:14px;line-height:1.55;cursor:pointer;transition:all 0.15s;font-family:inherit;display:flex;align-items:flex-start;gap:12px;}
+.opt:hover{border-color:var(--sdu-navy);background:#EDF0F7;}
+.opt.sel{border-color:var(--sdu-navy);background:#EDF0F7;color:var(--sdu-dark);font-weight:500;}
+.opt-ltr{width:24px;height:24px;min-width:24px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:1px;}
+.opt.sel .opt-ltr{background:var(--sdu-dark);color:var(--sdu-white);border-color:var(--sdu-dark);}
 
-  /* ── Navigation ── */
-  .nav-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 8px;
-  }
-  .nav-btn {
-    padding: 10px 22px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--white);
-    color: var(--slate);
-    font-size: 14px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-  }
-  .nav-btn:hover { border-color: var(--navy); color: var(--navy); }
-  .nav-btn:disabled { opacity: 0.35; cursor: default; }
-  .nav-btn.primary {
-    background: var(--navy);
-    color: var(--white);
-    border-color: var(--navy);
-  }
-  .nav-btn.primary:hover { background: var(--navy-mid); }
+/* NAV */
+.nav-row{display:flex;justify-content:space-between;align-items:center;}
+.nb{padding:10px 22px;border:1.5px solid var(--sdu-border);border-radius:9px;background:var(--sdu-white);color:var(--sdu-muted);font-size:14px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.nb:hover:not(:disabled){border-color:var(--sdu-navy);color:var(--sdu-navy);}
+.nb:disabled{opacity:0.28;cursor:default;}
+.nb.primary{background:var(--sdu-dark);color:var(--sdu-white);border-color:var(--sdu-dark);}
+.nb.primary:hover{background:var(--sdu-navy);}
+.dots{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:20px;}
+.dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;cursor:pointer;border:1.5px solid var(--sdu-border);background:var(--sdu-white);color:var(--sdu-muted);transition:all 0.15s;}
+.dot.ans{background:var(--green);color:var(--sdu-white);border-color:var(--green);}
+.dot.cur{background:var(--sdu-dark);color:var(--sdu-white);border-color:var(--sdu-dark);}
 
-  /* ── Dot navigation ── */
-  .dot-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  .dot {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 9px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    border: 1px solid var(--border);
-    background: var(--white);
-    color: var(--silver);
-  }
-  .dot.answered { background: var(--green); color: var(--white); border-color: var(--green); }
-  .dot.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+/* ── RESULTS ── */
+.r-header{background:var(--sdu-dark);border-radius:12px;padding:30px 32px;margin-bottom:20px;position:relative;overflow:hidden;}
+.r-header::after{content:'';position:absolute;right:-30px;bottom:-30px;width:160px;height:160px;border-radius:50%;border:40px solid rgba(0,160,210,0.06);}
+.rh-eye{font-size:10px;letter-spacing:3px;color:var(--sdu-accent);font-weight:700;text-transform:uppercase;margin-bottom:10px;}
+.rh-company{font-size:22px;font-weight:700;color:var(--sdu-white);margin-bottom:5px;}
+.rh-person{font-size:13px;color:rgba(0,160,210,0.85);margin-bottom:3px;}
+.rh-date{font-size:11px;color:rgba(255,255,255,0.35);}
 
-  /* ── Results ── */
-  .results-hidden { display: none; }
+.score-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.sc{background:var(--sdu-white);border:1px solid var(--sdu-border);border-radius:10px;padding:16px 12px;text-align:center;}
+.sc-lbl{font-size:11px;color:var(--sdu-muted);margin-bottom:7px;line-height:1.3;}
+.sc-val{font-size:26px;font-weight:700;line-height:1;}
+.sc-sub{font-size:11px;margin-top:5px;color:var(--sdu-muted);}
 
-  .result-header {
-    background: var(--navy);
-    border-radius: 12px;
-    padding: 28px;
-    margin-bottom: 20px;
-    color: var(--white);
-  }
-  .result-eyebrow {
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: var(--gold);
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .result-company {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .result-date {
-    font-size: 13px;
-    color: var(--silver);
-  }
+.r-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.r-panel{background:var(--sdu-white);border:1px solid var(--sdu-border);border-radius:12px;padding:24px;}
+.pnl-ttl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--sdu-muted);text-transform:uppercase;margin-bottom:18px;}
 
-  .score-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .score-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-  }
-  .score-card-label { font-size: 12px; color: var(--silver); margin-bottom: 6px; }
-  .score-card-value { font-size: 28px; font-weight: 700; margin-bottom: 2px; }
-  .score-card-sub { font-size: 11px; }
+.p-row{display:flex;align-items:center;gap:10px;margin-bottom:13px;}
+.p-lbl{font-size:12px;color:var(--sdu-text);width:168px;flex-shrink:0;line-height:1.3;}
+.p-track{flex:1;height:8px;background:var(--sdu-light);border-radius:4px;overflow:hidden;border:1px solid var(--sdu-border);}
+.p-fill{height:100%;border-radius:4px;transition:width 0.9s ease;}
+.p-score{font-size:13px;font-weight:700;width:36px;text-align:right;flex-shrink:0;}
 
-  .result-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sdu-muted);}
+.ld{width:10px;height:10px;border-radius:2px;}
 
-  .param-bars-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-  }
-  .card-title {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--silver);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .param-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .param-label {
-    font-size: 11.5px;
-    color: var(--slate);
-    width: 155px;
-    flex-shrink: 0;
-    line-height: 1.3;
-  }
-  .bar-track {
-    flex: 1;
-    height: 7px;
-    background: var(--off-white);
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
-  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
-  .param-score {
-    font-size: 13px;
-    font-weight: 700;
-    width: 28px;
-    text-align: right;
-    flex-shrink: 0;
-  }
+.fc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.fc{border-radius:10px;padding:16px;border:1px solid;}
+.fc.danger{background:var(--red-l);border-color:var(--red-b);}
+.fc.warning{background:var(--amber-l);border-color:var(--amber-b);}
+.fc.success{background:var(--green-l);border-color:var(--green-b);}
+.fc-ttl{font-size:12px;font-weight:700;margin-bottom:7px;}
+.fc.danger .fc-ttl{color:#7A1F1F;}
+.fc.warning .fc-ttl{color:#7A4A0A;}
+.fc.success .fc-ttl{color:#155235;}
+.fc-bdy{font-size:12px;line-height:1.55;}
+.fc.danger .fc-bdy{color:#983030;}
+.fc.warning .fc-bdy{color:#8A5510;}
+.fc.success .fc-bdy{color:#1A6838;}
 
-  .radar-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-  }
+.prio-card{background:var(--sdu-white);border:1px solid var(--sdu-border);border-radius:12px;padding:24px;margin-bottom:20px;}
+.prio-hdr{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--sdu-muted);text-transform:uppercase;margin-bottom:16px;}
+.prio-item{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--sdu-border);}
+.prio-item:last-child{border-bottom:none;padding-bottom:0;}
+.prio-n{width:30px;height:30px;border-radius:50%;background:var(--sdu-dark);color:var(--sdu-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.prio-param{font-size:13px;font-weight:600;color:var(--sdu-navy);margin-bottom:4px;}
+.prio-desc{font-size:12px;color:var(--sdu-muted);line-height:1.55;}
 
-  .legend-row {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    color: var(--silver);
-  }
-  .legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-  }
+/* CTA */
+.cta-card{background:var(--sdu-dark);border-radius:12px;padding:32px;margin-bottom:20px;display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;}
+.cta-l{flex:1;min-width:220px;}
+.cta-eye{font-size:10px;letter-spacing:3px;color:var(--sdu-accent);font-weight:700;text-transform:uppercase;margin-bottom:10px;}
+.cta-q{font-size:18px;font-weight:700;color:var(--sdu-white);line-height:1.4;margin-bottom:10px;}
+.cta-body{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7;}
+.cta-r{display:flex;flex-direction:column;gap:10px;align-items:flex-start;flex-shrink:0;}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:var(--sdu-accent);color:var(--sdu-dark);border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;transition:opacity 0.15s;font-family:inherit;border:none;cursor:pointer;white-space:nowrap;}
+.cta-btn:hover{opacity:0.85;}
+.cta-small{font-size:11px;color:rgba(255,255,255,0.3);font-style:italic;max-width:210px;line-height:1.55;}
 
-  .findings-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .finding-card {
-    border-radius: 10px;
-    padding: 14px 16px;
-    border: 1px solid;
-  }
-  .finding-card.danger { background: var(--red-light); border-color: #F5C4C4; }
-  .finding-card.warning { background: var(--amber-light); border-color: #FAC775; }
-  .finding-card.success { background: var(--green-light); border-color: #A8D5B5; }
-  .finding-title { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
-  .finding-card.danger .finding-title { color: #7B1A1A; }
-  .finding-card.warning .finding-title { color: #633806; }
-  .finding-card.success .finding-title { color: #1E5631; }
-  .finding-body { font-size: 12px; line-height: 1.5; }
-  .finding-card.danger .finding-body { color: #A32D2D; }
-  .finding-card.warning .finding-body { color: #854F0B; }
-  .finding-card.success .finding-body { color: #1E8449; }
+/* FOOTER BAR */
+.sdu-foot{background:var(--sdu-dark);border-radius:10px;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
+.sf-left{font-size:11px;color:rgba(255,255,255,0.35);line-height:1.6;}
+.sf-wm{display:flex;flex-direction:column;gap:0;align-items:flex-end;}
+.sf-wm-l1{font-size:10px;font-weight:800;color:var(--sdu-white);letter-spacing:1.5px;}
+.sf-wm-l2{font-size:10px;font-weight:800;color:var(--sdu-white);letter-spacing:1.5px;}
+.sf-wm-l3{font-size:7px;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase;margin-top:1px;}
 
-  .sdu-footer {
-    background: var(--navy);
-    border-radius: 10px;
-    padding: 18px 22px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .sdu-footer-left { font-size: 13px; color: var(--silver); }
-  .sdu-footer-right { font-size: 12px; color: var(--gold); font-style: italic; }
+.print-note{text-align:center;font-size:12px;color:var(--sdu-muted);font-style:italic;margin-bottom:14px;}
+.restart-btn{display:block;margin:0 auto;padding:11px 28px;border:1.5px solid var(--sdu-border-mid);border-radius:9px;background:transparent;color:var(--sdu-muted);font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.restart-btn:hover{border-color:var(--sdu-navy);color:var(--sdu-navy);}
+/* ── PHOTO UPLOAD ── */
+.photo-upload-wrap{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);}
+.photo-upload-label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:block;}
+.photo-input-row{display:flex;align-items:center;gap:10px;}
+.photo-input-btn{padding:9px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:7px;color:rgba(255,255,255,0.55);font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.photo-input-btn:hover{background:rgba(255,255,255,0.13);color:var(--sdu-white);}
+.photo-preview{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);display:none;}
+#photo-input{display:none;}
 
-  .restart-btn {
-    display: block;
-    margin: 20px auto 0;
-    padding: 11px 28px;
-    border: 1px solid var(--navy);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--navy);
-    font-size: 14px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-  }
-  .restart-btn:hover { background: var(--navy); color: var(--white); }
+/* ── CERTIFICATE BUTTON ── */
+.cert-btn-wrap{text-align:center;margin:24px 0 8px;}
+.cert-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:var(--sdu-white);color:var(--sdu-dark);border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.15s;letter-spacing:0.2px;}
+.cert-btn:hover{background:var(--sdu-light);transform:translateY(-1px);}
 
-  @media (max-width: 600px) {
-    .result-layout { grid-template-columns: 1fr; }
-    .score-cards-grid { grid-template-columns: 1fr 1fr; }
-    .findings-grid { grid-template-columns: 1fr; }
-    .param-label { width: 120px; font-size: 10.5px; }
-    .header-title { font-size: 22px; }
-  }
+/* ── CERTIFICATE OVERLAY ── */
+.cert-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:1000;align-items:center;justify-content:center;padding:24px;}
+.cert-overlay.active{display:flex;}
+.cert-modal{background:#F4F6F8;border-radius:16px;padding:24px;max-width:740px;width:100%;position:relative;max-height:92vh;overflow-y:auto;}
+.cert-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#8A9AB0;line-height:1;z-index:2;}
+.cert-close:hover{color:#1C2535;}
+.cert-actions{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap;}
+.cert-action-btn{padding:11px 24px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;letter-spacing:0.2px;}
+.cert-action-btn.primary{background:#0D182A;color:#fff;border:none;}
+.cert-action-btn.secondary{background:transparent;color:#6B7A94;border:1.5px solid #C8D2E0;}
+.cert-action-btn:hover{opacity:0.85;}
+
+/* ── CERTIFICATE CARD DESIGN ── */
+#cert-display{
+  background:#FFFFFF;
+  border-radius:12px;
+  overflow:hidden;
+  position:relative;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+}
+.cert-top-accent{height:6px;background:linear-gradient(90deg,#0D182A 0%,#294262 40%,#00A0D2 100%);}
+.cert-inner{padding:44px 52px 36px;}
+.cert-header-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:36px;}
+.cert-programme-badge{display:inline-flex;align-items:center;gap:8px;background:#F0F6FC;border:1px solid #C0D8EE;border-radius:6px;padding:7px 14px;}
+.cert-badge-dot{width:8px;height:8px;border-radius:50%;background:#00A0D2;flex-shrink:0;}
+.cert-badge-text{font-size:11px;font-weight:700;letter-spacing:1.5px;color:#294262;text-transform:uppercase;}
+.cert-logo-block{text-align:right;}
+.cert-logo-l1{font-size:12px;font-weight:800;color:#0D182A;letter-spacing:2px;line-height:1.2;text-transform:uppercase;}
+.cert-logo-l2{font-size:12px;font-weight:800;color:#0D182A;letter-spacing:2px;line-height:1.2;text-transform:uppercase;}
+.cert-logo-l3{font-size:8px;font-weight:500;color:#8A9AB0;letter-spacing:3px;margin-top:3px;text-transform:uppercase;}
+
+.cert-presented-to{font-size:11px;font-weight:600;letter-spacing:2px;color:#8A9AB0;text-transform:uppercase;margin-bottom:8px;}
+.cert-name{font-size:36px;font-weight:800;color:#0D182A;letter-spacing:-0.5px;line-height:1.15;margin-bottom:4px;}
+.cert-role{font-size:15px;color:#294262;margin-bottom:28px;font-weight:500;}
+
+.cert-statement{font-size:13px;color:#5A6A80;line-height:1.7;margin-bottom:32px;max-width:540px;border-left:3px solid #00A0D2;padding-left:16px;}
+
+.cert-scores-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
+.cert-score-box{background:#F7F9FC;border:1px solid #E2E8F0;border-radius:10px;padding:16px 10px;text-align:center;}
+.cert-score-box.highlight{background:#0D182A;border-color:#0D182A;}
+.cert-score-num{font-size:32px;font-weight:800;line-height:1;margin-bottom:4px;}
+.cert-score-box.highlight .cert-score-num{color:#FFFFFF;}
+.cert-score-lbl{font-size:9px;font-weight:600;letter-spacing:1px;color:#8A9AB0;text-transform:uppercase;line-height:1.4;}
+.cert-score-box.highlight .cert-score-lbl{color:rgba(255,255,255,0.55);}
+
+.cert-divider{height:1px;background:linear-gradient(90deg,#E2E8F0,#00A0D2,#E2E8F0);margin-bottom:24px;opacity:0.5;}
+
+.cert-footer-row{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;}
+.cert-footer-left{font-size:11px;color:#8A9AB0;line-height:1.6;}
+.cert-footer-left strong{color:#294262;display:block;font-size:12px;margin-bottom:2px;}
+.cert-photo{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #E2E8F0;display:none;}
+.cert-seal{width:52px;height:52px;border-radius:50%;background:#0D182A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
+.cert-seal-s{font-size:9px;font-weight:800;color:#FFFFFF;letter-spacing:1px;line-height:1;}
+.cert-seal-d{font-size:9px;font-weight:800;color:#00A0D2;letter-spacing:1px;line-height:1;}
+.cert-seal-u{font-size:9px;font-weight:800;color:#FFFFFF;letter-spacing:1px;line-height:1;}
+
+.cert-bottom-accent{height:4px;background:linear-gradient(90deg,#00A0D2 0%,#294262 60%,#0D182A 100%);}
+
+
+@media(max-width:640px){
+  .hdr-inner{flex-direction:column;align-items:flex-start;}
+  .hdr-right{text-align:left;}
+  .fg-grid{grid-template-columns:1fr;}
+  .score-strip{grid-template-columns:1fr 1fr;}
+  .r-grid{grid-template-columns:1fr;}
+  .fc-grid{grid-template-columns:1fr;}
+  .p-lbl{width:130px;font-size:11px;}
+  .cta-card{flex-direction:column;}
+}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="site-header">
-  <div class="header-inner">
-    <div class="header-eyebrow">Singhvi Dev and Unni LLP</div>
-    <div class="header-title">Ready for Scrutiny 2.0?</div>
-    <div class="header-sub">Audit Confidence Index — Self-Assessment Tool</div>
+  <div class="hdr-inner">
+    <div class="sdu-wordmark">
+      <div class="wm-line1">SINGHVI</div>
+      <div class="wm-line2">DEV &amp; UNNI LLP</div>
+      <div class="wm-line3">CHARTERED &nbsp; ACCOUNTANTS</div>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-title">Ready for Scrutiny 2.0?</div>
+      <div class="hdr-sub">THE AUDIT CONFIDENCE INDEX</div>
+    </div>
   </div>
-  <div class="header-gold-bar"></div>
+</div>
+<div class="hdr-strip">
+  <div class="hdr-strip-max">
+    <div class="hs-left">Advisory &nbsp;·&nbsp; Assurance &nbsp;·&nbsp; Tax &nbsp;·&nbsp; sdu.works</div>
+    <div class="hs-right">Self-Assessment &nbsp;·&nbsp; 24 Questions &nbsp;·&nbsp; ~10 Minutes</div>
+  </div>
 </div>
 
 <div class="container">
 
-  <!-- ── ASSESSMENT SECTION ── -->
-  <div id="assessment-section">
-    <div class="progress-wrap">
-      <div class="progress-meta">
-        <span id="progress-text">Question 1 of 18</span>
-        <span id="progress-pct">0% complete</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-      </div>
+<!-- ══ INTAKE ══ -->
+<div class="section active" id="sec-intake">
+  <div class="intake-wrap">
+    <div class="intake-hero">
+      <div class="ih-label">Singhvi Dev &amp; Unni LLP · Audit Confidence Index</div>
+      <div class="ih-title">How ready is your organisation for external scrutiny?</div>
+      <div class="ih-body">This assessment covers 24 scenario-based questions across 8 compliance and governance areas. The questions describe situations your finance team encounters every day — answer as you actually operate, not as you aspire to.<br><br>There are no obviously "right" answers. Your personalised Audit Confidence Index report is generated at the end. No data is stored or transmitted anywhere.</div>
     </div>
-
-    <div class="q-card" id="q-card">
-      <div class="q-meta">
-        <span class="q-matrix-tag" id="q-matrix-tag"></span>
-        <span class="q-tone-tag" id="q-tone-tag"></span>
-      </div>
-      <div class="q-text" id="q-text"></div>
-      <div class="q-note" id="q-note"></div>
-      <div class="options" id="options-list"></div>
-    </div>
-
-    <div class="nav-row">
-      <button class="nav-btn" id="btn-prev" onclick="navigate(-1)" disabled>← Previous</button>
-      <span id="q-counter" style="font-size:13px;color:var(--silver);"></span>
-      <button class="nav-btn primary" id="btn-next" onclick="navigate(1)">Next →</button>
-    </div>
-
-    <div class="dot-row" id="dot-row"></div>
-  </div>
-
-  <!-- ── RESULTS SECTION ── -->
-  <div id="results-section" class="results-hidden">
-
-    <div class="result-header">
-      <div class="result-eyebrow">Audit Confidence Index — Result</div>
-      <div class="result-company" id="res-company">Your Organisation</div>
-      <div class="result-date" id="res-date"></div>
-    </div>
-
-    <div class="score-cards-grid">
-      <div class="score-card">
-        <div class="score-card-label">Overall index score</div>
-        <div class="score-card-value" id="res-overall">—</div>
-        <div class="score-card-sub" id="res-status">—</div>
-      </div>
-      <div class="score-card">
-        <div class="score-card-label">Parameters at risk</div>
-        <div class="score-card-value" id="res-atrisk" style="color:var(--red);">—</div>
-        <div class="score-card-sub" style="color:var(--red);">Score below 2.5</div>
-      </div>
-      <div class="score-card">
-        <div class="score-card-label">Parameters strong</div>
-        <div class="score-card-value" id="res-strong" style="color:var(--green);">—</div>
-        <div class="score-card-sub" style="color:var(--green);">Score 4.0 or above</div>
-      </div>
-    </div>
-
-    <div class="result-layout">
-      <div class="param-bars-card">
-        <div class="card-title">Parameter breakdown</div>
-        <div id="param-bars"></div>
-        <div class="legend-row">
-          <div class="legend-item"><div class="legend-dot" style="background:#C0392B;"></div>At risk (below 2.5)</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#BA7517;"></div>Developing (2.5–3.9)</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#1E8449;"></div>Strong (4.0+)</div>
+    <div class="intake-form">
+      <div class="fg-grid">
+        <div class="fg">
+          <label class="fl">Your name <span>*</span></label>
+          <input class="fi" id="f-name" type="text" placeholder="Full name">
+        </div>
+        <div class="fg">
+          <label class="fl">Designation <span>*</span></label>
+          <input class="fi" id="f-desig" type="text" placeholder="e.g. CFO, Finance Controller">
         </div>
       </div>
-      <div class="radar-card">
-        <div class="card-title">Readiness radar</div>
-        <div style="position:relative;width:100%;height:260px;">
-          <canvas id="radarChart"></canvas>
+      <div class="fg">
+        <label class="fl">Organisation name <span>*</span></label>
+        <input class="fi" id="f-company" type="text" placeholder="Company or group name">
+      </div>
+      <div class="fg-grid">
+        <div class="fg">
+          <label class="fl">Industry / Sector</label>
+          <select class="fs" id="f-ind">
+            <option value="">Select sector</option>
+            <option>Manufacturing</option><option>Financial Services</option>
+            <option>Technology / SaaS</option><option>Real Estate &amp; Construction</option>
+            <option>Healthcare &amp; Pharma</option><option>Retail &amp; Consumer</option>
+            <option>Infrastructure &amp; EPC</option><option>Logistics &amp; Supply Chain</option>
+            <option>Media &amp; Entertainment</option><option>Other</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Organisation stage</label>
+          <select class="fs" id="f-stage">
+            <option value="">Select stage</option>
+            <option>Startup / Early stage</option><option>Growth stage / Series C+</option>
+            <option>Pre-IPO</option><option>Listed company</option>
+            <option>Private / Family business</option><option>Subsidiary of listed group</option>
+          </select>
         </div>
       </div>
-    </div>
-
-    <div class="findings-grid">
-      <div class="finding-card danger">
-        <div class="finding-title">Immediate attention required</div>
-        <div class="finding-body" id="finding-danger">—</div>
+      <div class="photo-upload-wrap">
+        <span class="photo-upload-label">Your photo <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(255,255,255,0.25);font-size:11px;">— optional, appears on your certificate</span></span>
+        <div class="photo-input-row">
+          <button type="button" class="photo-input-btn" onclick="document.getElementById('photo-input').click()">Upload photo</button>
+          <img id="photo-preview" class="photo-preview" alt="Your photo">
+          <input type="file" id="photo-input" accept="image/*" onchange="handlePhoto(event)">
+        </div>
       </div>
-      <div class="finding-card warning">
-        <div class="finding-title">Needs development</div>
-        <div class="finding-body" id="finding-warning">—</div>
-      </div>
-      <div class="finding-card success">
-        <div class="finding-title">Performing well</div>
-        <div class="finding-body" id="finding-success">—</div>
-      </div>
+      <button class="start-btn" onclick="startAssessment()" style="margin-top:20px;">Begin Assessment →</button>
+      <div class="intake-foot">Responses are anonymous · No data stored or transmitted · Results generated instantly</div>
     </div>
-
-    <div class="sdu-footer">
-      <div class="sdu-footer-left">Singhvi Dev and Unni LLP · Chartered Accountants · Bengaluru · Mumbai · Dubai</div>
-      <div class="sdu-footer-right">Reach out to your SDU partner for a detailed follow-up conversation.</div>
-    </div>
-
-    <button class="restart-btn" onclick="restart()">Retake assessment</button>
   </div>
-
 </div>
 
+<!-- ══ QUESTIONS ══ -->
+<div class="section" id="sec-questions">
+  <div class="prog-wrap">
+    <div class="prog-meta">
+      <span id="prog-txt">Question 1 of 24</span>
+      <span id="prog-pct">0% complete</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-top">
+      <div class="q-badge" id="q-badge">Question 1 of 24</div>
+      <div class="q-pct" id="q-pct"></div>
+    </div>
+    <div class="q-text" id="q-text"></div>
+    <div class="q-note" id="q-note"></div>
+    <div class="opts" id="opts"></div>
+  </div>
+  <div class="nav-row">
+    <button class="nb" id="btn-prev" onclick="nav(-1)" disabled>← Previous</button>
+    <span id="q-ctr" style="font-size:13px;color:var(--sdu-muted);"></span>
+    <button class="nb primary" id="btn-next" onclick="nav(1)">Next →</button>
+  </div>
+  <div class="dots" id="dots"></div>
+</div>
+
+<!-- ══ RESULTS ══ -->
+<div class="section" id="sec-results">
+
+  <div class="r-header">
+    <div class="rh-eye">SDU · Audit Confidence Index · Assessment Report</div>
+    <div class="rh-company" id="r-company">—</div>
+    <div class="rh-person" id="r-person">—</div>
+    <div class="rh-date" id="r-date">—</div>
+  </div>
+
+  <div style="background:#FDF4E4;border:1px solid #E8C070;border-radius:8px;padding:11px 16px;margin-bottom:16px;font-size:12px;color:#7A4A0A;line-height:1.55;">
+    <strong>About your scores:</strong> This index is calibrated so that a score of 8 or above reflects strong compliance practice. A score below 6 identifies areas a professional organisation should review. Most finance teams score between 4 and 7 on their first attempt.
+  </div>
+  <div class="score-strip">
+    <div class="sc"><div class="sc-lbl">Audit Confidence Index</div><div class="sc-val" id="r-overall">—</div><div class="sc-sub" id="r-status">—</div></div>
+    <div class="sc"><div class="sc-lbl">Areas at risk</div><div class="sc-val" id="r-atrisk" style="color:var(--red);">—</div><div class="sc-sub" style="color:var(--red);">Below 6.0 / 10</div></div>
+    <div class="sc"><div class="sc-lbl">Strong areas</div><div class="sc-val" id="r-strong" style="color:var(--green);">—</div><div class="sc-sub" style="color:var(--green);">8.0 or above</div></div>
+    <div class="sc"><div class="sc-lbl">Scrutiny readiness</div><div class="sc-val" id="r-ready">—</div><div class="sc-sub" id="r-ready-sub">—</div></div>
+  </div>
+
+  <div class="r-grid">
+    <div class="r-panel">
+      <div class="pnl-ttl">All 8 Parameter Scores — out of 10</div>
+      <div id="param-bars"></div>
+      <div class="leg">
+        <div class="li"><div class="ld" style="background:#B03030;"></div>Needs attention (&lt;6)</div>
+        <div class="li"><div class="ld" style="background:#9A5E08;"></div>Developing (6–7.9)</div>
+        <div class="li"><div class="ld" style="background:#1A6838;"></div>Performing well (8+)</div>
+      </div>
+    </div>
+    <div class="r-panel">
+      <div class="pnl-ttl">8-Parameter Readiness Radar</div>
+      <div style="position:relative;width:100%;height:280px;"><canvas id="radarChart"></canvas></div>
+      <div class="leg" style="margin-top:10px;">
+        <div class="li"><div class="ld" style="background:var(--sdu-navy);border-radius:50%;"></div>Your score</div>
+        <div class="li"><div class="ld" style="background:rgba(26,104,56,0.3);"></div>Benchmark (10)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fc-grid">
+    <div class="fc danger"><div class="fc-ttl">Immediate attention required</div><div class="fc-bdy" id="f-danger">—</div></div>
+    <div class="fc warning"><div class="fc-ttl">Needs development</div><div class="fc-bdy" id="f-warning">—</div></div>
+    <div class="fc success"><div class="fc-ttl">Performing well</div><div class="fc-bdy" id="f-success">—</div></div>
+  </div>
+
+  <div class="prio-card">
+    <div class="prio-hdr">Top 3 Priority Actions</div>
+    <div id="prio-list"></div>
+  </div>
+
+  <div class="cta-card">
+    <div class="cta-l">
+      <div class="cta-eye">A note from us</div>
+      <div class="cta-q">These questions reflect areas where regulations have evolved quietly — and where many well-run finance teams have simply not had the chance to catch up yet.</div>
+      <div class="cta-body">If something in your results raised a question — about what a specific regulation actually requires, whether your current practice is adequate, or just what the right next step looks like — we are happy to have that conversation.<br><br>No agenda. No follow-up unless you want one. Just a straightforward discussion with someone who works in this space every day.</div>
+    </div>
+    <div class="cta-r">
+      <a class="cta-btn" href="mailto:partner@sdu.works?subject=Audit Readiness — A Question&body=Dear SDU Team,%0D%0A%0D%0AI completed the Audit Confidence Index and had a question I wanted to discuss.%0D%0A%0D%0AOrganisation:%0D%0AName:%0D%0A%0D%0AThank you.">✉ Reach out to us</a>
+      <div class="cta-small">partner@sdu.works<br>We will get back to you.</div>
+    </div>
+  </div>
+
+  <div class="sdu-foot">
+    <div class="sf-left">Singhvi Dev &amp; Unni LLP · Chartered Accountants<br>Bengaluru · Mumbai · Dubai · sdu.works<br>This report is generated from self-reported responses. Scores reflect stated practices, not verified outcomes.</div>
+    <div class="sf-wm">
+      <div class="sf-wm-l1">SINGHVI</div>
+      <div class="sf-wm-l2">DEV &amp; UNNI LLP</div>
+      <div class="sf-wm-l3">Chartered Accountants</div>
+    </div>
+  </div>
+
+  <div class="print-note">Save as PDF — Ctrl+P (Windows) or Cmd+P (Mac) → "Save as PDF"</div>
+  <div class="cert-btn-wrap">
+    <button class="cert-btn" onclick="showCertificate()">
+      <span class="cert-btn-icon">◆</span> Download your assessment record
+    </button>
+  </div>
+
+  <button class="restart-btn" onclick="restart()">Retake assessment</button>
+</div>
+
+<!-- CERTIFICATE OVERLAY -->
+<div class="cert-overlay" id="cert-overlay" onclick="closeCertIfBg(event)">
+  <div class="cert-modal">
+    <button class="cert-close" onclick="closeCert()">✕</button>
+    <div id="cert-display">
+      <div class="cert-top-accent"></div>
+      <div class="cert-inner">
+        <div class="cert-header-row">
+          <div>
+            <div class="cert-programme-badge">
+              <div class="cert-badge-dot"></div>
+              <div class="cert-badge-text">Audit Confidence Index · Ready for Scrutiny 2.0?</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <img id="cert-photo" class="cert-photo" alt="">
+            <div class="cert-logo-block">
+              <div class="cert-logo-l1">SINGHVI</div>
+              <div class="cert-logo-l2">DEV &amp; UNNI LLP</div>
+              <div class="cert-logo-l3">CHARTERED &nbsp; ACCOUNTANTS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-presented-to">Presented to</div>
+        <div class="cert-name" id="cert-name">—</div>
+        <div class="cert-role" id="cert-role">—</div>
+        <div class="cert-statement" id="cert-stmt">—</div>
+
+        <div class="cert-scores-row" id="cert-scores"></div>
+        <div class="cert-divider"></div>
+
+        <div class="cert-footer-row">
+          <div class="cert-footer-left">
+            <strong id="cert-date">—</strong>
+            Self-Assessment Programme<br>
+            24 Questions · 8 Compliance Parameters<br>
+            Ready for Scrutiny 2.0?
+          </div>
+          <div class="cert-seal">
+            <div class="cert-seal-s">SDU</div>
+          </div>
+        </div>
+      </div>
+      <div class="cert-bottom-accent"></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-action-btn primary" onclick="printCert()">Print / Save as PDF</button>
+      <button class="cert-action-btn secondary" onclick="closeCert()">Close</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
 <script>
-const PARAMS = [
-  "Financial close integrity",
-  "Internal control effectiveness",
-  "Reporting & disclosure completeness",
-  "Evidence & documentation standards",
-  "Estimates & judgement quality",
-  "Statutory & regulatory hygiene",
-  "Governance & oversight strength",
-  "Assurance learning index"
+const PARAMS=[
+  "MSME Compliance",
+  "Related Party & Disclosures",
+  "Documentation & Timing",
+  "Audit Trail & Digital Records",
+  "Statutory Obligations",
+  "Governance & Oversight",
+  "Internal Control Integrity",
+  "Assurance Learning"
 ];
 
-const MATRIX_COLORS = {
-  "Financial Close Integrity":         { bg:"#EBF0FA", color:"#1F3864", border:"#B5C8E8" },
-  "Internal Control Effectiveness":    { bg:"#E2EFDA", color:"#1E5631", border:"#A8D5B5" },
-  "Reporting & Disclosure":            { bg:"#D6EAF8", color:"#0C447C", border:"#85B7EB" },
-  "Evidence & Documentation":          { bg:"#FEF9E7", color:"#7E5109", border:"#DFC080" },
-  "Estimates & Judgement":             { bg:"#FDEAEA", color:"#7B1A1A", border:"#F5C4C4" },
-  "Statutory & Regulatory Hygiene":    { bg:"#D1F2EB", color:"#0E6655", border:"#7ED6C1" },
-  "Governance & Oversight":            { bg:"#F4ECF7", color:"#4A235A", border:"#C39BD3" },
-  "Assurance Learning Index":          { bg:"#FEF3CD", color:"#633806", border:"#FAC775" }
-};
-
-const QUESTIONS = [
-  { matrix:"Financial Close Integrity", tone:"R",
-    text:"Your finance team typically finalises key audit schedules, reconciliations, and open-item resolution during the audit fieldwork period — working alongside the auditor rather than completing them before the auditor arrives.",
-    note:"Think about how your last audit cycle actually ran, not how it is supposed to run.",
-    opts:["No — all key schedules are complete and reviewed before fieldwork begins","Mostly ready before fieldwork, with a few items completed early in the fieldwork window","About half is ready before fieldwork, the rest is completed as the audit progresses","Most schedules are prepared in response to auditor queries during fieldwork","The audit and the close process run simultaneously — the auditor works with what is available"] },
-
-  { matrix:"Financial Close Integrity", tone:"P",
-    text:"If your auditor started fieldwork tomorrow, your team could produce a complete set of audit-ready schedules, reconciliations, and supporting workings within 24 hours — without needing to prepare anything new.",
-    note:"Be honest — this is about operational readiness, not aspiration.",
-    opts:["Yes — completely. Everything is pre-prepared, reviewed, and retrievable","Mostly yes, with one or two items that would need a few hours of finalisation","We could produce most things but a few areas would take 2–3 days","We would need at least a week to get everything properly organised","We are not structured in a way that allows for rapid production of audit-ready material"] },
-
-  { matrix:"Internal Control Effectiveness", tone:"R",
-    text:"In your organisation, the person responsible for operating a financial control is usually also the person who checks whether that control worked correctly.",
-    note:"Think about your most significant financial controls — revenue recognition, payments, journal entries.",
-    opts:["No — we have clear and documented separation between operating and testing controls","Mostly separated, with one or two exceptions we are actively working to fix","It depends on the control — some are separated, some overlap","There is significant overlap in most areas but we are aware of the risk","The same team operates and reviews almost all our financial controls"] },
-
-  { matrix:"Internal Control Effectiveness", tone:"P",
-    text:"When your auditor identified a control deficiency in the last audit, your finance team had already flagged it internally and started working on a fix — the auditor did not discover something you were unaware of.",
-    note:"Based on the last two audit cycles.",
-    opts:["Yes — we almost always identify control gaps internally before the auditor does","We catch most issues internally, though occasionally the auditor identifies something first","About half and half — some we knew, some were a genuine surprise","Most control gaps are first raised by the auditor during fieldwork","We rely almost entirely on the audit process to identify our control weaknesses"] },
-
-  { matrix:"Reporting & Disclosure", tone:"R",
-    text:"Your related party register is formally updated once a year — typically during the annual compliance exercise at the start of the financial year or during audit preparation.",
-    note:"Think about what actually triggers an update to your RPT list.",
-    opts:["No — the register is updated within days of any directorship, KMP, or significant shareholding change","We update on major changes but our process is not triggered by every change automatically","We update annually and make ad-hoc changes when something significant comes to our attention","We update annually — between updates we rely on management awareness of new RPTs","We update the RPT list during the audit when the auditor asks for it"] },
-
-  { matrix:"Reporting & Disclosure", tone:"R",
-    text:"Your finance team identifies MSME vendors primarily based on whether vendors have shared their Udyam Registration Certificate or mentioned their MSME status during vendor onboarding.",
-    note:"Think about how your MSME register is actually populated and maintained.",
-    opts:["No — we proactively screen all vendors against MSME criteria each year using our own verification","We do our own screening but also rely on vendor declarations to supplement it","We have a mix — systematic for larger vendors, declaration-based for smaller ones","We primarily rely on vendor self-declaration and update when vendors share certificates","We record MSME status based entirely on what vendors tell us or share with us"] },
-
-  { matrix:"Evidence & Documentation", tone:"R",
-    text:"The management representation letter in your organisation is typically prepared and signed in the same week that the audit report is being finalised.",
-    note:"Think about the actual timing in your last two audit cycles.",
-    opts:["No — the MRL is always signed at least a week before the audit report date, with every assertion independently verified","We sign it a few days before the report — there may be some time pressure but it is before the report","We sign it around the same time as the report, sometimes on the same day","The MRL is often signed after the audit process is substantially complete — timing varies","We sign it when the auditor presents it to us, which is typically at the end of the process"] },
-
-  { matrix:"Evidence & Documentation", tone:"R",
-    text:"When your auditor requires bank confirmations or confirmations from creditors and debtors, your finance team facilitates the process — preparing letters, distributing them to counterparties, and collecting responses.",
-    note:"Think about who actually manages the confirmation process end to end.",
-    opts:["No — the auditor sends and receives all confirmations directly; we only provide contact details","The auditor leads the process but we coordinate introductions and sometimes follow up on non-responses","We share the process — the auditor sends requests, we help collect and chase responses","We prepare the confirmation templates and manage most of the distribution and collection","We manage the confirmation process and hand the completed responses to the auditor"] },
-
-  { matrix:"Estimates & Judgement", tone:"R",
-    text:"In your organisation, it is common for accounting estimates — provisions, useful lives, impairment assessments — to use the prior year basis as the starting point, adjusting only when something material has changed.",
-    note:"Think about your most significant estimates and how the annual review actually works.",
-    opts:["No — every material estimate is reviewed fresh each year with assumptions re-examined from the ground up","We restart fresh for high-risk estimates; lower-risk ones use the prior year as a starting point","Most estimates start from the prior year basis with a structured review of whether assumptions still hold","We carry forward prior year estimates and adjust when the auditor or a significant event requires it","Carry-forward is the standard approach unless a business change makes it obviously inappropriate"] },
-
-  { matrix:"Estimates & Judgement", tone:"P",
-    text:"For your most significant accounting estimate this year, a document exists — prepared before audit fieldwork began — showing the key assumptions used, the sensitivity of the estimate to changes in those assumptions, and the formal sign-off from a senior officer.",
-    note:"Think about your largest provision, impairment, or valuation estimate.",
-    opts:["Yes — fully documented with assumptions, sensitivity, and senior sign-off before the audit began","Assumptions are documented and signed off, though sensitivity analysis is informal","The estimate and key assumptions are documented but were finalised during early fieldwork","The estimate document was prepared in response to the auditor's request during fieldwork","The estimate exists but formal documentation of assumptions and sign-off is not in place"] },
-
-  { matrix:"Statutory & Regulatory Hygiene", tone:"R",
-    text:"In your organisation, CARO reporting requirements are primarily managed by the auditor — your team provides information when asked during the audit and reviews the draft CARO report before it is finalised.",
-    note:"Think about who drives the CARO process in practice.",
-    opts:["No — we proactively track all CARO-reportable matters throughout the year and can confirm our position at any time","We track most CARO matters actively but rely on the auditor to prompt us on some areas","We have good awareness of CARO requirements but our tracking is more reactive than proactive","We understand what CARO covers but the detailed tracking happens during the audit preparation","CARO is the auditor's report — we provide information when they ask for it"] },
-
-  { matrix:"Statutory & Regulatory Hygiene", tone:"P",
-    text:"Your finance team can confirm right now, without any preparation time, whether the company has had any payment delays to MSME vendors beyond the 45-day limit in the current financial year — and the approximate amount.",
-    note:"This is about operational visibility, not whether you would eventually be able to find out.",
-    opts:["Yes — we have a live tracking mechanism and can answer this immediately","We could answer this within a few hours by running a report","We would need a day or two to compile and verify this position","We could get an approximate answer within a week by reviewing AP records","This would take significant effort to determine and we may not have a precise answer"] },
-
-  { matrix:"Governance & Oversight", tone:"R",
-    text:"Before audit committee meetings, your finance team prepares a summary or briefing note on the key audit findings and significant issues — which is shared with audit committee members in advance of the auditor's own presentation.",
-    note:"Think about the actual process before your last two audit committee meetings.",
-    opts:["No — the auditor communicates independently with the audit committee; we do not pre-frame or summarise findings","We provide factual background on agenda items but do not summarise the auditor's findings","We prepare context documents that touch on audit matters but try not to pre-frame the auditor's message","We prepare a comprehensive briefing on audit findings to help the committee be well-prepared","We prepare a full summary of audit findings for the committee before the auditor presents"] },
-
-  { matrix:"Governance & Oversight", tone:"P",
-    text:"Your audit committee has at least one private meeting per year with the auditor — without the CFO, finance team, or management present — as a standing agenda item.",
-    note:"This is a specific governance requirement under SA 260.",
-    opts:["Yes — private access is a standing agenda item and happens at least once every audit cycle","Yes, it happens but it is arranged on an ad-hoc basis rather than as a standing item","It has happened once or twice but is not a regular part of our governance calendar","The CFO is present in most interactions but steps out occasionally if requested","The audit committee and auditor meetings always have management present throughout"] },
-
-  { matrix:"Assurance Learning Index", tone:"P",
-    text:"After each audit cycle closes, your finance team conducts a formal internal review — where every finding is logged, an action is assigned with a named owner and a specific deadline, and someone is responsible for verifying that each change was actually implemented.",
-    note:"Think about what happened after your most recent audit sign-off.",
-    opts:["Yes — a formal structured review with documented actions, owners, deadlines, and a verification step","A review happens and actions are agreed, but tracking and verification are informal","We discuss findings but do not have a formal structured process for tracking implementation","The audit findings are noted and communicated but follow-up is left to individual judgment","We do not have a formal post-audit review practice — findings are acknowledged and we move on"] },
-
-  { matrix:"Assurance Learning Index", tone:"R",
-    text:"If you compared the audit observations from this year with those from two years ago, at least one or two of the same themes or weakness areas would appear in both years.",
-    note:"Recurring findings across audit cycles are among the clearest indicators of absent learning.",
-    opts:["No — we track findings across cycles and can confirm no significant issue has recurred","One area has come up again but it is being actively addressed with a documented plan","One or two areas tend to recur — we are aware of them but have not yet formally resolved them","There are recurring themes most years and the team knows what they are","The same issues have appeared consistently across multiple consecutive audit cycles"] },
-
-  { matrix:"Estimates & Judgement", tone:"R",
-    text:"For board-approved related party transactions above the statutory threshold, your organisation sometimes enters into the transaction first and obtains formal board approval or ratification at the next quarterly board meeting.",
-    note:"This is a common practice in many organisations — answer honestly.",
-    opts:["No — formal board approval is always obtained before any RPT is entered into, without exception","Very rarely — in genuine emergencies only, with same-day documentation of the urgency","Occasionally for time-sensitive situations — the next board meeting ratifies it","This happens from time to time — prior approval is the aim but ratification is used when needed","Post-facto ratification is a normal part of how we handle RPTs in time-sensitive situations"] },
-
-  { matrix:"Financial Close Integrity", tone:"P",
-    text:"Your finance team has a documented year-end close checklist that assigns specific tasks, owners, and deadlines — and the close process for the last financial year was completed on schedule without material items carrying into the audit window.",
-    note:"Think about whether your close process is systematised or largely driven by individual judgment and experience.",
-    opts:["Yes — fully documented checklist, clear ownership, and our last close completed on schedule","We have a checklist and it mostly works, though one or two items typically slip into the audit window","We have an informal process that works through team experience, with partial documentation","Our close process is largely experience-driven — documentation exists but is not consistently followed","Our close process is undocumented and relies on the team's knowledge of what needs to happen"] }
+const QUADRANTS=[
+  {label:"Financial Compliance",desc:"MSME + Related Party",params:[0,1]},
+  {label:"Documentation Quality",desc:"Documentation + Audit Trail",params:[2,3]},
+  {label:"Statutory Readiness",desc:"Statutory + Governance",params:[4,5]},
+  {label:"Control & Learning",desc:"Controls + Assurance",params:[6,7]}
 ];
 
-const PARAM_MAP = {
-  "Financial Close Integrity": 0,
-  "Internal Control Effectiveness": 1,
-  "Reporting & Disclosure": 2,
-  "Evidence & Documentation": 3,
-  "Estimates & Judgement": 4,
-  "Statutory & Regulatory Hygiene": 5,
-  "Governance & Oversight": 6,
-  "Assurance Learning Index": 7
-};
+const ACTIONS=[
+  "Build an independent MSME vendor identification process — do not rely on vendor declarations. Screen all vendors against MCA/MSME portal data annually, track payments against the 45-day statutory limit with an automated alert, and maintain a live MSME register that can be produced on demand.",
+  "Implement quarterly RPT register updates triggered by any directorship, KMP, or shareholding change. Independently verify family member interests — not just what directors declare. Obtain prior board approval for all Section 188 transactions before they are entered into.",
+  "Establish a documentation protocol where every material accounting decision is recorded at the time it is made — not reconstructed during the audit. The MRL must be signed before (not on or after) the audit report date. All key audit schedules must exist before fieldwork begins.",
+  "Verify that your accounting software has audit trail functionality enabled from April 1, 2023, as required under MCA Rule 11(g). Confirm the audit log is tamper-proof, reviewed quarterly, and that edit and delete trails are captured — not just creation entries.",
+  "Run a statutory obligation review quarterly — not annually. Specifically: check Section 194Q TDS applicability if your turnover exceeds ₹10 Cr; verify CSR obligation every year; run Section 164(2) director disqualification checks for all group companies; and review Significant Beneficial Owner filings under Section 90.",
+  "Schedule at least one private meeting per audit cycle between your external auditor and audit committee — without management present. Finance teams must not pre-frame or summarise audit findings for the committee before the auditor presents them independently.",
+  "Map every financial control to a separate tester. Implement maker-checker for all payments above your policy threshold. Review user access rights quarterly — remove or restrict rights when roles change. Retain documented evidence of testing, not just control design.",
+  "Within 30 days of each audit sign-off, hold a formal post-audit review. Assign every observation a named owner, a documented action, and a deadline. Verify closure before the next audit cycle begins. Measure whether the same observation has appeared in more than one consecutive cycle."
+];
 
-let current = 0;
-let answers = new Array(QUESTIONS.length).fill(null);
-let radarChart = null;
+// 24 questions — 3 per parameter — trap design
+// The "comfortable" answer typically scores 4-6, the truly compliant answer scores 8-10
+const QS=[
 
-function scoreColor(s) {
-  if (s < 2.5) return "#C0392B";
-  if (s < 4.0) return "#BA7517";
-  return "#1E8449";
+// ── PARAMETER 0: MSME COMPLIANCE ──
+{p:0,
+ text:"Your organisation purchases goods from a vendor your team has been dealing with for five years. The vendor has never mentioned being MSME registered. Your accounts payable team pays them within your standard credit terms of 60 days. Which best describes your current practice?",
+ note:"The MSMED Act 2006 limits payment to MSME suppliers to 45 days — regardless of what your contract says. The identification obligation rests with the buyer, not the vendor.",
+ opts:[
+  ["A","We independently screen all vendors against MSME registration data each year. Our payment system flags any MSME vendor payment approaching 45 days — regardless of contractual terms.",8],
+  ["B","We check MSME status when onboarding vendors. If nothing has changed since onboarding, we pay within contractual terms.",4],
+  ["C","We pay within our standard 60-day credit terms. If the vendor is MSME registered, they would have told us — we update our records when they do.",2],
+  ["D","We pay on time as per the contract. MSME compliance is the vendor's responsibility to raise if they have a concern.",1]
+ ]},
+
+{p:0,
+ text:"It is the 20th of March — 11 days before your financial year ends. Your finance team is preparing the year-end MSME disclosure for the financial statements. Which of these most accurately describes how the disclosure figure is arrived at?",
+ note:"Section 22 of the MSMED Act requires disclosure of outstanding amounts to MSME suppliers beyond the payment due date. This is auditor-verified and appears in the financial statements.",
+ opts:[
+  ["A","We maintain a live MSME register throughout the year. The disclosure figure is pulled from our payment tracking system — no estimation required.",8],
+  ["B","We run an analysis of our creditors and cross-check against our MSME register compiled at the start of the year.",6],
+  ["C","Our accounts team compiles the MSME list by asking vendors to confirm their status and reviewing the ledger for overdue payments.",4],
+  ["D","The auditor helps us compile this during the audit. We provide the creditor ageing and they identify MSME parties based on what we have on file.",2],
+  ["E","This disclosure has not been a focus area for us — our auditor prepares it and we review and sign off.",1]
+ ]},
+
+{p:0,
+ text:"Your company's turnover is ₹8 crore. You purchase raw materials worth ₹55 lakhs annually from a vendor who recently registered as an MSME under Udyam. Under Section 16 of the MSMED Act, what is the interest rate applicable on delayed payments to this vendor?",
+ note:"This tests whether your team understands the statutory consequence of delayed MSME payments — not just the process.",
+ opts:[
+  ["A","Three times the bank rate notified by RBI — which is significantly higher than our borrowing cost. We track this proactively precisely because of this consequence.",8],
+  ["B","I believe there is a higher rate applicable but I would need to check the exact rate. Our team is aware of the penalty principle.",6],
+  ["C","I am not certain of the exact rate. We pay on time so it hasn't come up as a practical issue.",4],
+  ["D","The same rate as our standard overdue interest. I was not aware there was a different rate for MSME vendors.",2],
+  ["E","I was not aware that a specific statutory interest rate applies to MSME payment delays.",1]
+ ]},
+
+// ── PARAMETER 1: RELATED PARTY & DISCLOSURES ──
+{p:1,
+ text:"Your company has given an interest-free loan of ₹40 lakhs to one of its shareholders who holds 15% of the paid-up share capital. The loan has been outstanding for the current financial year. Which of these statements best reflects how this has been treated in your books?",
+ note:"Under Section 2(22)(e) of the Income Tax Act, loans given to shareholders holding more than 10% of voting rights can be treated as deemed dividend — taxable in the hands of the shareholder. This is one of the most commonly overlooked provisions.",
+ opts:[
+  ["A","We are aware of Section 2(22)(e). This loan was structured and approved with specific legal advice on deemed dividend implications and the tax treatment was addressed at the time.",8],
+  ["B","We are aware of the deemed dividend provision and have flagged this to our tax team. It is currently under review.",6],
+  ["C","We treat this as a director or shareholder loan in the books. Whether it triggers deemed dividend is something I would need to check with our tax advisor.",4],
+  ["D","We have disclosed it as a related party loan in the financial statements. I am not aware of a deemed dividend implication.",2],
+  ["E","This is an interest-free loan to a shareholder. It is shown as a receivable. I was not aware that any Income Tax provision is relevant here.",1]
+ ]},
+
+{p:1,
+ text:"Your Managing Director urgently needed the company to purchase a plot of land from a company in which his brother-in-law holds a 40% stake. The board meeting to approve this was only scheduled three weeks later. How was this handled?",
+ note:"Section 188 of the Companies Act requires prior approval of the board of directors for transactions with related parties above prescribed thresholds. Post-facto ratification is permitted only in very specific circumstances.",
+ opts:[
+  ["A","The transaction was not entered into until prior board approval was obtained. We obtained a board resolution before the purchase agreement was signed.",8],
+  ["B","We obtained a written consent from all directors over email before the transaction and formalised this at the next board meeting.",6],
+  ["C","The transaction was completed and the board ratified it at the next meeting. This is standard practice for urgent matters.",4],
+  ["D","The MD approved it under his authority. It was disclosed at the next board meeting as a related party transaction.",2],
+  ["E","The purchase went through as a normal property transaction. I am not certain whether the brother-in-law's interest makes this a related party transaction under Section 188.",1]
+ ]},
+
+{p:1,
+ text:"Your CFO's adult son has recently set up a company that provides software maintenance services. In the current year, your organisation has paid this company ₹18 lakhs for services rendered. How was this captured?",
+ note:"Related parties include companies in which a director's relatives hold significant interest — as defined under Schedule 1A of the Companies Act read with AS 18. Relatives include adult children.",
+ opts:[
+  ["A","This was identified through our independent RPT screening process — not because the CFO disclosed it proactively. The transaction was approved in advance by the board.",8],
+  ["B","The CFO disclosed it in his annual interest declaration. The transaction was reviewed and board-approved.",6],
+  ["C","The CFO declared this at the start of the year. We have disclosed it in the RPT schedule of our financial statements.",4],
+  ["D","We were not certain whether a CFO's adult son's company qualifies as a related party. The transaction was done at market rates and we are reviewing the disclosure requirement.",2],
+  ["E","This was processed as a normal vendor payment. We were not aware that the CFO's son's company would require related party treatment.",1]
+ ]},
+
+// ── PARAMETER 2: DOCUMENTATION & TIMING ──
+{p:2,
+ text:"Your finance team provides bank confirmation letters to the auditor by printing them on company letterhead, signing them, and couriering them to your banks. The banks send confirmation responses to your auditor's address. Which of these best reflects this process?",
+ note:"SA 505 requires the auditor to control the external confirmation process directly. The finance team's role is limited to providing contact details — not preparing, signing, or dispatching the request letters.",
+ opts:[
+  ["A","The auditor prepares and sends all confirmation requests directly to the banks — using their own letterhead and the bank's address. We only provide the bank contact details.",8],
+  ["B","The auditor prepares the letters and we coordinate the dispatch. Responses come directly to the auditor.",6],
+  ["C","We prepare the confirmation letters on our company letterhead and sign them, and the auditor checks the responses when received.",4],
+  ["D","We manage the confirmation process — preparing the letters, couriering to banks, and collecting the sealed envelopes to hand to the auditor.",2],
+  ["E","We prepare the letters, manage the entire process, and provide the auditor with the signed bank confirmations at the end.",1]
+ ]},
+
+{p:2,
+ text:"Your company created a significant provision for doubtful debts last quarter. If your auditor asked tomorrow to see the documentation supporting this provision, which of these best describes what exists?",
+ note:"Contemporaneous documentation — records that existed at the time the decision was made — is the standard SA 230 requires. Documents assembled after the fact in response to an auditor query do not meet this standard.",
+ opts:[
+  ["A","A formal working paper exists — prepared at the time the provision was made — with debtor-wise analysis, ageing, recovery probability assessment, and sign-off by the CFO.",8],
+  ["B","A spreadsheet analysis was prepared at the time with the key basis. Some supporting communication with the debtors is on file.",6],
+  ["C","The basis for the provision is known to the CFO and finance team. We could prepare a formal write-up within a day if required.",4],
+  ["D","We would need to compile the supporting analysis. The provision was made based on management judgment — the documentation would need to be prepared for the auditor.",2],
+  ["E","The provision appears in the books. The basis would need to be reconstructed by reviewing debtor ledgers and communications.",1]
+ ]},
+
+{p:2,
+ text:"Your financial statements were signed and the audit report was issued on June 30th. On what date was the Management Representation Letter signed?",
+ note:"SA 580 requires the Management Representation Letter to be dated on or before the date of the auditor's report — not after. It also requires that every assertion in the letter be independently verified before it is signed.",
+ opts:[
+  ["A","At least one week before June 30th. Every assertion was independently verified by our team before signing.",8],
+  ["B","A few days before June 30th. We reviewed the assertions and signed after completing our verification.",6],
+  ["C","On June 30th itself — the same date as the audit report.",4],
+  ["D","I am not certain of the exact date. It was signed around the time of the audit completion.",2],
+  ["E","It was signed after June 30th or after the audit report was finalised. I was not aware that the timing was a compliance requirement.",1]
+ ]},
+
+// ── PARAMETER 3: AUDIT TRAIL & DIGITAL RECORDS ──
+{p:3,
+ text:"From April 1, 2023, MCA Rules require that accounting software used by companies maintain an audit trail of every transaction — including any edits or deletions. Which best describes the status of your accounting software?",
+ note:"Rule 11(g) of the Companies (Audit and Auditors) Rules, 2014 mandates an audit trail feature in accounting software. The feature must be enabled — it does not activate automatically. The auditor is required to report on this in their report.",
+ opts:[
+  ["A","We confirmed with our software vendor and IT team that the audit trail feature is enabled and capturing all transactions including edits and deletions. We have documentation of this verification.",8],
+  ["B","We are aware of the requirement. Our IT team has confirmed the feature is enabled. We have not yet done a formal verification of completeness.",6],
+  ["C","We believe our software has an audit trail. The auditor checks this during the audit and we have not received a specific observation on it.",4],
+  ["D","We were aware of this requirement but have not yet formally verified whether our current software version complies. It is on our action list.",2],
+  ["E","I was not aware of this specific requirement. I would need to check with our IT team.",1]
+ ]},
+
+{p:3,
+ text:"A finance team member with access to your accounting system left the company three months ago. Which of these best describes what happened to their system access?",
+ note:"Unauthorised or unrevoked access in accounting systems creates an audit trail integrity risk and an internal control gap. NFRA expects auditors to verify access controls — and traces gaps back to what the company's process allowed.",
+ opts:[
+  ["A","Access was revoked on the last working day, as per our documented access termination protocol. The user's last activity log was reviewed before deactivation.",8],
+  ["B","Access was revoked within a week of their departure once HR notified IT.",6],
+  ["C","Access was revoked during the next quarterly access rights review, approximately three months after departure.",4],
+  ["D","The access may still be active. Our access review process has not been completed since they left.",2],
+  ["E","We do not have a formal process for revoking system access on resignation. It is managed informally.",1]
+ ]},
+
+{p:3,
+ text:"Last month, your finance team corrected an error in a supplier payment entry in your accounting system — the wrong amount had been posted. Which best describes how this correction was made?",
+ note:"A tamper-proof audit trail means all changes to posted entries — even legitimate corrections — must be visible in the system log. Deleting and re-entering, or directly editing posted entries without a system-logged audit trail, is a red flag under MCA Rule 11(g).",
+ opts:[
+  ["A","A reversal entry was posted with a documented reason and authoriser. The original entry, the reversal, and the correcting entry are all visible in the system — with timestamps and user IDs.",8],
+  ["B","A journal entry was posted to correct the error, with a narration. Both entries are visible in the ledger.",6],
+  ["C","The entry was edited directly in the system by a team member with administrator access. The correction shows only the final amount.",4],
+  ["D","The original entry was deleted and a new correct entry was posted. We did not retain a record of the deletion.",2],
+  ["E","We are not certain how such corrections are made in our system. It is handled by the person who made the original entry.",1]
+ ]},
+
+// ── PARAMETER 4: STATUTORY OBLIGATIONS ──
+{p:4,
+ text:"Your company's turnover crossed ₹10 crore in the previous financial year. In the current year, you purchased goods worth ₹60 lakhs from the same supplier. Under Section 194Q of the Income Tax Act, which of these is correct?",
+ note:"Section 194Q (effective July 1, 2021) requires the buyer to deduct TDS at 0.1% on purchases exceeding ₹50 lakhs from a single supplier in a financial year, if the buyer's turnover exceeded ₹10 crore in the previous year. Many companies are unaware or believe this applies only to certain sectors.",
+ opts:[
+  ["A","We are aware of Section 194Q. Our accounts payable system is configured to trigger TDS deduction on purchases from any supplier once the ₹50 lakh threshold is crossed.",8],
+  ["B","We are aware of 194Q and have reviewed applicability. We deduct TDS on the excess amount above ₹50 lakhs.",6],
+  ["C","We were not certain this applies to our industry or purchase category. We deduct TDS based on our standard TDS matrix which was set up a few years ago.",4],
+  ["D","We were not aware that a purchase TDS provision exists. TDS in our books relates to professional fees, rent, and contractors.",2],
+  ["E","I am not familiar with Section 194Q. We would need to consult our tax team.",1]
+ ]},
+
+{p:4,
+ text:"Your company recorded a net profit of ₹6.2 crore in the previous financial year, making it liable for CSR spending under Section 135 of the Companies Act. The company spent ₹8 lakhs on CSR activities. The mandatory CSR obligation was ₹18.6 lakhs. What happens to the unspent ₹10.6 lakhs?",
+ note:"Unspent CSR amounts for ongoing projects must be transferred to a special account within 30 days of financial year-end. Unspent amounts not related to ongoing projects must be transferred to a Government fund within 6 months.",
+ opts:[
+  ["A","We transferred the unspent amount to the Unspent CSR Account within 30 days of year-end, as per the amended Companies Act provisions. This was tracked and disclosed in the Board Report.",8],
+  ["B","We are aware of the transfer requirement. The unspent amount has been transferred to the designated account.",6],
+  ["C","We disclosed the shortfall in the Board Report and plan to make up the difference in the next financial year's CSR spending.",4],
+  ["D","We disclosed the shortfall. I was not aware that a mandatory transfer to a special account is required for unspent amounts.",2],
+  ["E","We noted the shortfall. Unspent CSR is a disclosure item in the Board Report — I was not aware of a mandatory fund transfer requirement.",1]
+ ]},
+
+{p:4,
+ text:"One of your company's directors also sits on the board of a sister concern that has failed to file its annual financial statements with the MCA for the past three consecutive years. Under Section 164(2) of the Companies Act, what is the implication for this director's position on your board?",
+ note:"Section 164(2) disqualifies a director from being appointed or re-appointed to any company for five years if they are a director of a company that has not filed financial statements or annual returns for three consecutive years. The disqualification is automatic — it is not conditional on a court order.",
+ opts:[
+  ["A","We are aware of Section 164(2). We run annual checks on all our directors' compliance status across all companies they are associated with — including sister concerns.",8],
+  ["B","We check our own company's filing compliance. We were not aware that filings by sister concerns where our director sits could affect their eligibility on our board.",4],
+  ["C","We knew about 164(2) in general but assumed it applied only if our company defaulted. I was not aware it extended to other companies the director is associated with.",2],
+  ["D","I was not aware of this provision. If a director is disqualified due to another company's default, I did not know this invalidates their position on our board automatically.",1]
+ ]},
+
+// ── PARAMETER 5: GOVERNANCE & OVERSIGHT ──
+{p:5,
+ text:"Your external auditor has just completed their audit for the year. As part of the audit committee meeting, the committee chair asked the CFO to walk them through the key audit observations before the auditor's presentation. The CFO spent 15 minutes summarising the findings and recommendations. Which of these best reflects the governance implication?",
+ note:"SA 260 requires the auditor to independently communicate significant matters to those charged with governance. Management pre-framing or summarising these communications limits the auditor's independence in making those communications.",
+ opts:[
+  ["A","We do not permit management to summarise or pre-frame audit findings before the auditor presents. The audit committee receives the auditor's communication first — independently.",8],
+  ["B","We provide factual background on agenda items but specifically avoid summarising the auditor's findings or observations in advance.",6],
+  ["C","The CFO provides context and the auditor then presents. We see this as helping the committee be well-prepared.",4],
+  ["D","The CFO walks through the findings before the auditor presents. The auditor attends to answer questions — this is how our meetings are structured.",2],
+  ["E","The committee expects management to brief them on the audit before the auditor speaks. We have always operated this way.",1]
+ ]},
+
+{p:5,
+ text:"At the conclusion of the last external audit, your auditor issued a Management Letter with observations that did not rise to the level of formal qualification but were flagged as areas of improvement. Which of these best describes what happened next?",
+ note:"Management letters are often treated as advisory rather than mandatory. However, recurring management letter observations — particularly those that appear in the formal CARO report in subsequent years — indicate absent follow-through.",
+ opts:[
+  ["A","Every management letter observation was assigned a named owner, a corrective action, and a deadline within 30 days of receipt. Closure was verified before the next audit cycle.",8],
+  ["B","Key observations were assigned to owners and tracked. One or two lower-priority items were noted but not formally tracked.",6],
+  ["C","The management letter was reviewed by the CFO. Actions were discussed but not formally documented or tracked.",4],
+  ["D","The management letter was filed. Relevant team members were verbally informed. Formal tracking did not occur.",2],
+  ["E","We received the management letter but it was not formally discussed or actioned beyond the CFO reviewing it.",1]
+ ]},
+
+{p:5,
+ text:"Your audit committee held three meetings this financial year — one per quarter and one at year-end to approve financial statements. Which of these best describes the audit committee's interaction with your external auditor across these meetings?",
+ note:"SEBI LODR and SA 260 require the audit committee to meet the external auditor at least once a year — without management. The auditor's presence at each meeting should include the opportunity to raise matters independently.",
+ opts:[
+  ["A","The auditor attended all four meetings. At one meeting specifically, management left the room and the committee met privately with the auditor. This is a standing practice.",8],
+  ["B","The auditor attended the year-end meeting and one interim meeting. There was no dedicated private session between the committee and auditor.",6],
+  ["C","The auditor attended only the year-end meeting to present findings. Other meetings were internal management discussions.",4],
+  ["D","The auditor presents at the year-end meeting. The committee does not typically interact with the auditor beyond that meeting.",2],
+  ["E","The audit committee approves the financial statements. The auditor is not usually present at all committee meetings.",1]
+ ]},
+
+// ── PARAMETER 6: INTERNAL CONTROL INTEGRITY ──
+{p:6,
+ text:"Your accounts payable team processes approximately 200 vendor payments per month. The same team member who prepares the payment instruction also has the system access to release the payment to the bank after a supervisor's email approval. Which of these best describes the control risk here?",
+ note:"Segregation of duties requires that the person preparing a payment cannot also release it. Email approvals that do not go through the payment system itself do not create a system-enforced control — they can be bypassed.",
+ opts:[
+  ["A","No single person can both prepare and release a payment in our system. System controls enforce separation — a different named individual must release the payment and the system logs both actions.",8],
+  ["B","Preparation and release are done by different team members. Email approval from a supervisor is required and retained.",6],
+  ["C","The same person prepares and releases, but a supervisor's email approval is mandatory. We consider this adequate oversight.",4],
+  ["D","For efficiency, the same team member prepares and releases payments. The supervisor reviews the bank statement monthly.",2],
+  ["E","We have not formally evaluated the segregation of duties on our payment process. The current setup is how it has always worked.",1]
+ ]},
+
+{p:6,
+ text:"Your accounting system allows journal entries to be posted directly to the ledger without a secondary approver. Last month, your finance team posted 47 manual journal entries. How are these journal entries reviewed?",
+ note:"Unrestricted journal entry access — particularly the ability to post without secondary approval — is one of the most significant internal control risks. NFRA has cited inadequate journal entry controls in enforcement orders across multiple sectors.",
+ opts:[
+  ["A","All manual journal entries above a threshold require a secondary approver before they can be posted. A monthly exception report of journal entries is reviewed by the CFO with documented sign-off.",8],
+  ["B","Journal entries are reviewed by the CFO monthly. The review is documented. There is no pre-posting approval requirement.",6],
+  ["C","Journal entries are reviewed by the finance manager on a sample basis. The full population is not reviewed every month.",4],
+  ["D","Journal entries are prepared by the finance team and reviewed at year-end during audit preparation.",2],
+  ["E","Journal entries are posted as needed. There is no formal review process beyond the person who posts them.",1]
+ ]},
+
+{p:6,
+ text:"Your finance team lead who managed accounts receivable, cash reconciliations, and customer credit approvals was promoted to a different role six months ago. Which of these best describes what happened to their system access in the accounts receivable module?",
+ note:"Access rights that are not updated when roles change are one of the most commonly cited internal control findings — because the person retains access to functions they no longer need, creating both fraud risk and audit evidence risk.",
+ opts:[
+  ["A","Their AR module access was restricted on the day the role changed, as part of our role-change access protocol. The new access profile matches only the permissions required for the new role.",8],
+  ["B","Access was reviewed and updated within two weeks of the role change.",6],
+  ["C","Their old access was retained as they occasionally support the AR team during month-end. A formal access update has not been completed.",4],
+  ["D","Their original access profile was not changed. In practice they no longer use those functions.",2],
+  ["E","We do not have a formal process for reviewing system access when roles change. Access updates are done informally.",1]
+ ]},
+
+// ── PARAMETER 7: ASSURANCE LEARNING ──
+{p:7,
+ text:"Your auditor completed the audit for the year ended March 31st and the report was signed on June 20th. It is now July 25th — five weeks after the audit report date. Which of these best describes the status of the audit observations?",
+ note:"Post-audit follow-through is one of the most reliable indicators of whether an organisation genuinely learns from its audits — or repeats the same issues each cycle.",
+ opts:[
+  ["A","A formal post-audit review was held within two weeks of the report date. Every observation has a named owner, a documented action, and a deadline. A closure review is scheduled before the next audit cycle begins.",8],
+  ["B","Key observations have been assigned to owners. A formal review meeting was held. One or two items are still being discussed.",6],
+  ["C","The audit observations were shared with the CFO and relevant team leads. Actions were verbally agreed but not formally documented.",4],
+  ["D","The audit observations have been filed. The team is aware of them. Formal action tracking has not begun.",2],
+  ["E","Nothing formal has happened yet with the audit observations. The next cycle begins in 8 months so there is time.",1]
+ ]},
+
+{p:7,
+ text:"Your organisation has completed three consecutive annual audits. Looking across the audit reports and management letters from all three years, how many of the same themes or observations appear in more than one year?",
+ note:"Recurring audit observations across consecutive cycles are among the strongest indicators of absent institutional learning — and are treated by NFRA as evidence of systemic weakness, not isolated incidents.",
+ opts:[
+  ["A","None. We track observations across audit cycles and can confirm no significant issue has recurred. Closure is verified formally before the next cycle.",8],
+  ["B","One issue recurred — it was partially addressed in the prior year but not completely closed. We have a documented plan to close it this year.",6],
+  ["C","One or two themes recur each year. The team is aware of them but the underlying process change has not yet been made.",4],
+  ["D","Several observations repeat across years. We acknowledge them at the end of each audit but the volume of work means they are deferred.",2],
+  ["E","The same observations appear most years. We address the most significant ones — smaller recurring items are managed during the audit each year.",1]
+ ]},
+
+{p:7,
+ text:"Your internal auditor raises an observation about a control gap in your procurement process — the same observation they raised 18 months ago. At the time, management agreed to fix it. Which of these best describes why it has recurred?",
+ note:"Internal audit observations that recur reveal the gap between management agreement and actual implementation. NFRA and external auditors both treat recurring internal audit observations as evidence of governance weakness.",
+ opts:[
+  ["A","This has not happened in our organisation. We have a formal internal audit observation closure process — every agreed action is tracked until verified as implemented.",8],
+  ["B","It happened once. The original action was implemented partially. We have since strengthened the closure verification process.",6],
+  ["C","Recurring internal audit observations do happen. The process fix was discussed but organisational priorities delayed implementation.",4],
+  ["D","Internal audit observations are agreed upon but follow-through is inconsistent. The same issues tend to surface in subsequent reviews.",2],
+  ["E","Internal audit raises observations and management responds. Whether they are actually implemented is not formally tracked.",1]
+ ]}
+];
+
+let cur=0,answers=new Array(QS.length).fill(null),radarChart=null,participant={};
+
+function scCol(s){return s<6?"#B03030":s<8?"#9A5E08":"#1A6838";}
+function scLbl(s){
+  if(s>=8)return"Performing well";
+  if(s>=7)return"Mostly ready";
+  if(s>=6)return"Needs improvement";
+  if(s>=4)return"At risk";
+  return"Significant gaps";
+}
+function readLbl(s){
+  if(s>=8)return["High","Low scrutiny risk"];
+  if(s>=6)return["Moderate","Targeted gaps"];
+  if(s>=4)return["Low","Multiple risk areas"];
+  return["At Risk","Urgent attention needed"];
 }
 
-function scoreLabel(s) {
-  if (s >= 4.5) return "Fully confident";
-  if (s >= 4.0) return "Performing well";
-  if (s >= 3.5) return "Mostly ready";
-  if (s >= 3.0) return "Developing";
-  if (s >= 2.5) return "Partially ready";
-  if (s >= 2.0) return "Aware, unprepared";
-  return "Significant gaps";
+function startAssessment(){
+  const n=document.getElementById("f-name").value.trim();
+  const d=document.getElementById("f-desig").value.trim();
+  const c=document.getElementById("f-company").value.trim();
+  if(!n||!d||!c){alert("Please enter your name, designation, and organisation name to continue.");return;}
+  participant={name:n,desig:d,company:c,
+    industry:document.getElementById("f-ind").value||"",
+    stage:document.getElementById("f-stage").value||""};
+  show("sec-questions");renderQ();
 }
 
-function renderQuestion() {
-  const q = QUESTIONS[current];
-  const mc = MATRIX_COLORS[q.matrix] || { bg:"#EBF0FA", color:"#1F3864", border:"#B5C8E8" };
+function show(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
+}
 
-  const tag = document.getElementById("q-matrix-tag");
-  tag.textContent = q.matrix;
-  tag.style.background = mc.bg;
-  tag.style.color = mc.color;
-  tag.style.borderColor = mc.border;
+function renderQ(){
+  const q=QS[cur];
+  // NO category shown during questions — just the number
+  document.getElementById("q-badge").textContent="Question "+(cur+1)+" of "+QS.length;
+  document.getElementById("q-pct").textContent=Math.round((answers.filter(a=>a!==null).length/QS.length)*100)+"% answered";
+  document.getElementById("q-text").textContent=q.text;
+  document.getElementById("q-note").textContent=q.note;
+  document.getElementById("q-ctr").textContent=(cur+1)+" / "+QS.length;
 
-  const toneTag = document.getElementById("q-tone-tag");
-  toneTag.textContent = q.tone === "P" ? "↑ Positive" : "↓ Reverse scored";
-  toneTag.className = "q-tone-tag " + (q.tone === "P" ? "tone-p" : "tone-r");
-
-  document.getElementById("q-text").textContent = q.text;
-  document.getElementById("q-note").textContent = q.note;
-
-  const opts = document.getElementById("options-list");
-  opts.innerHTML = "";
-  const scoreMap = q.tone === "P" ? [5,4,3,2,1] : [5,4,3,2,1];
-  // Reverse tone: option 1 = score 5 (denying the weakness), option 5 = score 1
-  // Positive tone: option 1 = score 5 (affirming good practice), option 5 = score 1
-  q.opts.forEach((opt, i) => {
-    const score = 5 - i;
-    const btn = document.createElement("button");
-    btn.className = "option-btn" + (answers[current] === score ? " selected" : "");
-    btn.textContent = opt;
-    btn.onclick = () => selectAnswer(score, i);
-    opts.appendChild(btn);
+  const opts=document.getElementById("opts");
+  opts.innerHTML="";
+  // Shuffle options using seeded order per question so shuffle is consistent
+  // if user goes back to the same question — same shuffle shown
+  const shuffled = shuffleOpts(q.opts, cur);
+  shuffled.forEach(([ltr,lbl,score],i)=>{
+    const b=document.createElement("button");
+    b.className="opt"+(answers[cur]===score?" sel":"");
+    // Show A/B/C/D/E labels based on shuffled position, not original
+    const dispLetter = String.fromCharCode(65+i);
+    b.innerHTML=`<span class="opt-ltr">${dispLetter}</span><span>${lbl}</span>`;
+    b.onclick=()=>selAns(score,i,shuffled);
+    opts.appendChild(b);
   });
 
-  const answered = answers.filter(a => a !== null).length;
-  const pct = Math.round((answered / QUESTIONS.length) * 100);
-  document.getElementById("progress-text").textContent = `Question ${current + 1} of ${QUESTIONS.length}`;
-  document.getElementById("progress-pct").textContent = pct + "% complete";
-  document.getElementById("progress-fill").style.width = pct + "%";
-  document.getElementById("q-counter").textContent = `${current + 1} / ${QUESTIONS.length}`;
-  document.getElementById("btn-prev").disabled = current === 0;
-  document.getElementById("btn-next").textContent = current === QUESTIONS.length - 1 ? "See results →" : "Next →";
-
+  const ans=answers.filter(a=>a!==null).length;
+  document.getElementById("prog-txt").textContent="Question "+(cur+1)+" of "+QS.length;
+  document.getElementById("prog-pct").textContent=Math.round((ans/QS.length)*100)+"% complete";
+  document.getElementById("prog-fill").style.width=Math.round((ans/QS.length)*100)+"%";
+  document.getElementById("btn-prev").disabled=cur===0;
+  document.getElementById("btn-next").textContent=cur===QS.length-1?"See my results →":"Next →";
   renderDots();
 }
 
-function renderDots() {
-  const row = document.getElementById("dot-row");
-  row.innerHTML = "";
-  QUESTIONS.forEach((_, i) => {
-    const d = document.createElement("div");
-    d.className = "dot" + (i === current ? " active" : answers[i] !== null ? " answered" : "");
-    d.textContent = i + 1;
-    d.onclick = () => { current = i; renderQuestion(); };
+function renderDots(){
+  const row=document.getElementById("dots");row.innerHTML="";
+  QS.forEach((_,i)=>{
+    const d=document.createElement("div");
+    d.className="dot"+(i===cur?" cur":answers[i]!==null?" ans":"");
+    d.textContent=i+1;d.onclick=()=>{cur=i;renderQ();};
     row.appendChild(d);
   });
 }
 
-function selectAnswer(score, optIndex) {
-  answers[current] = score;
-  document.querySelectorAll(".option-btn").forEach((btn, i) => {
-    btn.classList.toggle("selected", i === optIndex);
-  });
+function shuffleOpts(opts, seed) {
+  // Deterministic shuffle per question index so back/forward shows same order
+  const arr = [...opts];
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.abs(Math.sin(seed*997+i*31)|0) % (i+1);
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function selAns(score,idx,shuffled){
+  answers[cur]=score;
+  document.querySelectorAll(".opt").forEach((b,i)=>b.classList.toggle("sel",i===idx));
   renderDots();
-  setTimeout(() => {
-    if (current < QUESTIONS.length - 1) {
-      current++;
-      renderQuestion();
-    } else {
-      showResults();
-    }
-  }, 350);
+  setTimeout(()=>{if(cur<QS.length-1){cur++;renderQ();}else showResults();},340);
 }
 
-function navigate(dir) {
-  const next = current + dir;
-  if (next < 0 || next > QUESTIONS.length - 1) {
-    if (dir === 1 && current === QUESTIONS.length - 1) showResults();
-    return;
-  }
-  current = next;
-  renderQuestion();
+function nav(dir){
+  const n=cur+dir;
+  if(n<0||n>QS.length-1){if(dir===1&&cur===QS.length-1)showResults();return;}
+  cur=n;renderQ();
 }
 
-function computeParamScores() {
-  const sums = new Array(8).fill(0);
-  const counts = new Array(8).fill(0);
-  QUESTIONS.forEach((q, i) => {
-    if (answers[i] !== null) {
-      const pi = PARAM_MAP[q.matrix];
-      if (pi !== undefined) {
-        sums[pi] += answers[i];
-        counts[pi]++;
-      }
-    }
+function computeScores(){
+  const sums=new Array(8).fill(0),counts=new Array(8).fill(0);
+  QS.forEach((q,i)=>{if(answers[i]!==null){sums[q.p]+=answers[i];counts[q.p]++;}});
+  return sums.map((s,i)=>counts[i]>0?parseFloat((s/counts[i]).toFixed(1)):0);
+}
+
+function showResults(){
+  const uq=answers.filter(a=>a===null).length;
+  if(uq>0&&!confirm(uq+" question(s) unanswered. Show results anyway?"))return;
+
+  const scores=computeScores();
+  const valid=scores.filter(s=>s>0);
+  const overall=valid.length>0?parseFloat((valid.reduce((a,b)=>a+b,0)/valid.length).toFixed(1)):0;
+  const atRisk=scores.filter(s=>s>0&&s<6).length;
+  const strong=scores.filter(s=>s>=8).length;
+  const [rLv,rSb]=readLbl(overall);
+
+  document.getElementById("r-company").textContent=participant.company;
+  let p=participant.name+" · "+participant.desig;
+  if(participant.industry)p+=" · "+participant.industry;
+  if(participant.stage)p+=" · "+participant.stage;
+  document.getElementById("r-person").textContent=p;
+  document.getElementById("r-date").textContent=
+    "Ready for Scrutiny 2.0? · Audit Confidence Index · "+
+    new Date().toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"});
+
+  const ov=document.getElementById("r-overall");
+  ov.textContent=overall.toFixed(1)+"/10";ov.style.color=scCol(overall);
+  const st=document.getElementById("r-status");
+  st.textContent=scLbl(overall);st.style.color=scCol(overall);
+  document.getElementById("r-atrisk").textContent=atRisk;
+  document.getElementById("r-strong").textContent=strong;
+  const rv=document.getElementById("r-ready");
+  rv.textContent=rLv;rv.style.color=scCol(overall);
+  document.getElementById("r-ready-sub").textContent=rSb;
+
+  // Bars — NOW shows parameter names (revealed only in results)
+  const barsDiv=document.getElementById("param-bars");barsDiv.innerHTML="";
+  PARAMS.forEach((lbl,i)=>{
+    const s=scores[i],col=scCol(s),pct=(s/10)*100;
+    barsDiv.innerHTML+=`<div class="p-row">
+      <div class="p-lbl">${lbl}</div>
+      <div class="p-track"><div class="p-fill" style="width:${pct}%;background:${col};"></div></div>
+      <div class="p-score" style="color:${col};">${s>0?s.toFixed(1):"—"}</div>
+    </div>`;
   });
-  return sums.map((s, i) => counts[i] > 0 ? parseFloat((s / counts[i]).toFixed(2)) : 0);
-}
 
-function showResults() {
-  const allAnswered = answers.every(a => a !== null);
-  if (!allAnswered) {
-    const unanswered = answers.map((a, i) => a === null ? i + 1 : null).filter(Boolean);
-    if (!confirm(`You have ${unanswered.length} unanswered question(s). Show results anyway?`)) return;
-  }
-
-  document.getElementById("assessment-section").style.display = "none";
-  const res = document.getElementById("results-section");
-  res.classList.remove("results-hidden");
-
-  const paramScores = computeParamScores();
-  const validScores = paramScores.filter(s => s > 0);
-  const overall = validScores.length > 0
-    ? parseFloat((validScores.reduce((a,b)=>a+b,0)/validScores.length).toFixed(1))
-    : 0;
-
-  const atRisk = paramScores.filter(s => s > 0 && s < 2.5).length;
-  const strong = paramScores.filter(s => s >= 4.0).length;
-
-  document.getElementById("res-overall").textContent = overall.toFixed(1) + " / 5";
-  document.getElementById("res-overall").style.color = scoreColor(overall);
-  document.getElementById("res-status").textContent = scoreLabel(overall);
-  document.getElementById("res-status").style.color = scoreColor(overall);
-  document.getElementById("res-atrisk").textContent = atRisk;
-  document.getElementById("res-strong").textContent = strong;
-
-  const now = new Date();
-  document.getElementById("res-date").textContent =
-    "Ready for Scrutiny 2.0?  ·  Assessment date: " +
-    now.toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" });
-
-  // Parameter bars
-  const barsDiv = document.getElementById("param-bars");
-  barsDiv.innerHTML = "";
-  PARAMS.forEach((label, i) => {
-    const s = paramScores[i];
-    const col = scoreColor(s);
-    const pct = (s / 5) * 100;
-    barsDiv.innerHTML += `
-      <div class="param-row">
-        <div class="param-label">${label}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col};"></div></div>
-        <div class="param-score" style="color:${col};">${s.toFixed(1)}</div>
-      </div>`;
-  });
+  // 8-parameter circular radar — all params plotted directly
+  const qScores=scores;
 
   // Findings
-  const atRiskParams = PARAMS.filter((_, i) => paramScores[i] > 0 && paramScores[i] < 2.5);
-  const devParams = PARAMS.filter((_, i) => paramScores[i] >= 2.5 && paramScores[i] < 4.0);
-  const strongParams = PARAMS.filter((_, i) => paramScores[i] >= 4.0);
+  const atRN=PARAMS.filter((_,i)=>scores[i]>0&&scores[i]<6);
+  const devN=PARAMS.filter((_,i)=>scores[i]>=6&&scores[i]<8);
+  const stN=PARAMS.filter((_,i)=>scores[i]>=8);
+  document.getElementById("f-danger").textContent=atRN.length>0
+    ?atRN.join(", ")+" scored below 5.0 — these areas carry the highest scrutiny risk and should be addressed before your next audit cycle."
+    :"No parameters fell into the at-risk range.";
+  document.getElementById("f-warning").textContent=devN.length>0
+    ?devN.join(", ")+" are developing — processes exist but are inconsistent or partially implemented."
+    :"No parameters in the developing range.";
+  document.getElementById("f-success").textContent=stN.length>0
+    ?stN.join(", ")+" scored 8.0 or above — these are defensible strengths."
+    :"No parameters reached the strong threshold. Focused improvement across all areas is recommended.";
 
-  document.getElementById("finding-danger").textContent =
-    atRiskParams.length > 0
-      ? atRiskParams.join(", ") + " scored below 2.5 — these are primary scrutiny triggers requiring immediate attention before your next audit cycle."
-      : "No parameters scored in the at-risk range. Good foundation across all areas.";
+  // Priority — 3 lowest
+  const sorted=scores.map((s,i)=>({p:i,s})).filter(x=>x.s>0).sort((a,b)=>a.s-b.s).slice(0,3);
+  const pl=document.getElementById("prio-list");pl.innerHTML="";
+  sorted.forEach((item,idx)=>{
+    pl.innerHTML+=`<div class="prio-item"><div class="prio-n">${idx+1}</div><div>
+      <div class="prio-param">${PARAMS[item.p]} — ${item.s.toFixed(1)}/10</div>
+      <div class="prio-desc">${ACTIONS[item.p]}</div></div></div>`;
+  });
 
-  document.getElementById("finding-warning").textContent =
-    devParams.length > 0
-      ? devParams.join(", ") + " are developing — adequate in parts but inconsistent. Formalising these areas will reduce scrutiny risk materially."
-      : "All parameters are either strong or at risk — no parameters in the developing range.";
-
-  document.getElementById("finding-success").textContent =
-    strongParams.length > 0
-      ? strongParams.join(", ") + " are your strongest areas — these form a credible base for any external review or due diligence process."
-      : "No parameters scored 4.0 or above. Focused improvement across all areas is recommended.";
-
-  // Radar chart
-  if (radarChart) radarChart.destroy();
-  const shortLabels = ["Close integrity","Controls","Reporting","Documentation","Estimates","Stat. hygiene","Governance","Learning"];
-
-  radarChart = new Chart(document.getElementById("radarChart"), {
-    type: "radar",
-    data: {
-      labels: shortLabels,
-      datasets: [
-        {
-          label: "Your score",
-          data: paramScores,
-          backgroundColor: "rgba(31,56,100,0.12)",
-          borderColor: "#1F3864",
-          borderWidth: 2,
-          pointBackgroundColor: paramScores.map(s => scoreColor(s)),
-          pointBorderColor: "#fff",
-          pointBorderWidth: 1.5,
-          pointRadius: 5,
-        },
-        {
-          label: "Benchmark",
-          data: [5,5,5,5,5,5,5,5],
-          backgroundColor: "rgba(30,132,73,0.05)",
-          borderColor: "rgba(30,132,73,0.3)",
-          borderWidth: 1,
-          borderDash: [4,3],
-          pointRadius: 0,
-        }
+  // 8-parameter circular radar
+  const shortLabels=[
+    "MSME","Related Party","Documentation","Audit Trail",
+    "Statutory","Governance","Controls","Learning"
+  ];
+  if(radarChart)radarChart.destroy();
+  radarChart=new Chart(document.getElementById("radarChart"),{
+    type:"radar",
+    data:{
+      labels:shortLabels,
+      datasets:[
+        {label:"Your score",data:qScores,
+          backgroundColor:"rgba(41,66,98,0.14)",borderColor:"#294262",borderWidth:2.5,
+          pointBackgroundColor:qScores.map(s=>scCol(s)),
+          pointBorderColor:"#fff",pointBorderWidth:2,pointRadius:6,pointHoverRadius:8},
+        {label:"Benchmark",data:[10,10,10,10,10,10,10,10],
+          backgroundColor:"rgba(26,104,56,0.04)",borderColor:"rgba(26,104,56,0.22)",
+          borderWidth:1.5,borderDash:[4,4],pointRadius:0}
       ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${Number(ctx.raw).toFixed(1)} / 5` } }
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          title:ctx=>{return PARAMS[ctx[0].dataIndex];},
+          label:ctx=>` ${ctx.dataset.label}: ${Number(ctx.raw).toFixed(1)} / 10`
+        }}
       },
-      scales: {
-        r: {
-          min: 0, max: 5,
-          ticks: { stepSize: 1, font: { size: 10 }, backdropColor: "transparent", color: "#8A9AB0" },
-          grid: { color: "rgba(0,0,0,0.07)" },
-          angleLines: { color: "rgba(0,0,0,0.07)" },
-          pointLabels: { color: "#374151", font: { size: 11 } }
+      scales:{r:{
+        min:0,max:10,
+        ticks:{stepSize:2,font:{size:9},backdropColor:"transparent",color:"#9AAABB",maxTicksLimit:6},
+        grid:{color:"rgba(0,0,0,0.055)"},
+        angleLines:{color:"rgba(0,0,0,0.055)"},
+        pointLabels:{
+          color:"#294262",
+          font:{size:10,weight:"600"},
+          callback:function(label){return label;}
         }
-      }
+      }}
     }
   });
+
+  show("sec-results");
 }
 
-function restart() {
-  answers = new Array(QUESTIONS.length).fill(null);
-  current = 0;
-  document.getElementById("results-section").classList.add("results-hidden");
-  document.getElementById("assessment-section").style.display = "block";
-  renderQuestion();
+
+let photoDataUrl = null;
+
+function handlePhoto(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    photoDataUrl = e.target.result;
+    const preview = document.getElementById('photo-preview');
+    preview.src = photoDataUrl;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
 }
 
-renderQuestion();
+function showCertificate() {
+  const scores = computeScores();
+  const valid = scores.filter(s=>s>0);
+  const overall = valid.length>0 ? parseFloat((valid.reduce((a,b)=>a+b,0)/valid.length).toFixed(1)) : 0;
+  const strong = scores.filter(s=>s>=8).length;
+  const atRisk = scores.filter(s=>s>0&&s<6).length;
+  const overallStr = overall > 0 ? overall.toFixed(1) : '—';
+
+  document.getElementById('cert-name').textContent = participant.name || '—';
+  document.getElementById('cert-role').textContent =
+    [participant.desig, participant.company].filter(Boolean).join('  ·  ');
+
+  const lvl = overall >= 8 ? 'strong' : overall >= 6 ? 'developing' : 'foundational';
+  const stmtMap = {
+    strong: 'has completed a rigorous self-assessment of their organisation\'s compliance and governance practices, demonstrating a high level of audit readiness across NFRA-aligned parameters. The results reflect a finance function that is well-positioned for external scrutiny.',
+    developing: 'has completed a self-assessment of their organisation\'s compliance and governance practices across 8 NFRA-aligned parameters. The results provide a clear roadmap for strengthening audit readiness and governance maturity.',
+    foundational: 'has taken a proactive step in assessing their organisation\'s compliance and governance practices across 8 NFRA-aligned parameters covering documentation, statutory obligations, internal controls, and governance. The assessment identifies specific areas for improvement.'
+  };
+  document.getElementById('cert-stmt').textContent = stmtMap[lvl];
+
+  const scoreRow = document.getElementById('cert-scores');
+  scoreRow.innerHTML = `
+    <div class="cert-score-box highlight">
+      <div class="cert-score-num">${overallStr}</div>
+      <div class="cert-score-lbl">Audit Confidence Index · out of 10</div>
+    </div>
+    <div class="cert-score-box">
+      <div class="cert-score-num" style="color:#1A6838;">${strong}</div>
+      <div class="cert-score-lbl">Parameters Performing Well</div>
+    </div>
+    <div class="cert-score-box">
+      <div class="cert-score-num" style="color:#B03030;">${atRisk}</div>
+      <div class="cert-score-lbl">Parameters Needing Attention</div>
+    </div>
+    <div class="cert-score-box">
+      <div class="cert-score-num" style="color:#294262;">24</div>
+      <div class="cert-score-lbl">Questions Completed</div>
+    </div>`;
+
+  document.getElementById('cert-date').textContent =
+    new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+
+  const cPhoto = document.getElementById('cert-photo');
+  if(photoDataUrl) { cPhoto.src=photoDataUrl; cPhoto.style.display='block'; }
+  else { cPhoto.style.display='none'; }
+
+  document.getElementById('cert-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCert() {
+  document.getElementById('cert-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function closeCertIfBg(e) {
+  if(e.target === document.getElementById('cert-overlay')) closeCert();
+}
+
+function printCert() {
+  const certHTML = document.getElementById('cert-display').outerHTML;
+  const win = window.open('', '_blank', 'width=760,height=600');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <title>Audit Confidence Index — Certificate</title>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0;}
+      body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f6f8;padding:24px;}
+      @media print{body{padding:0;background:#fff;}}
+      #cert-display{max-width:720px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;}
+      .cert-top-accent{height:6px;background:linear-gradient(90deg,#0D182A 0%,#294262 40%,#00A0D2 100%);}
+      .cert-bottom-accent{height:4px;background:linear-gradient(90deg,#00A0D2 0%,#294262 60%,#0D182A 100%);}
+      .cert-inner{padding:44px 52px 36px;}
+      .cert-header-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:36px;}
+      .cert-programme-badge{display:inline-flex;align-items:center;gap:8px;background:#F0F6FC;border:1px solid #C0D8EE;border-radius:6px;padding:7px 14px;}
+      .cert-badge-dot{width:8px;height:8px;border-radius:50%;background:#00A0D2;flex-shrink:0;}
+      .cert-badge-text{font-size:11px;font-weight:700;letter-spacing:1.5px;color:#294262;text-transform:uppercase;}
+      .cert-logo-block{text-align:right;}
+      .cert-logo-l1,.cert-logo-l2{font-size:12px;font-weight:800;color:#0D182A;letter-spacing:2px;line-height:1.2;text-transform:uppercase;}
+      .cert-logo-l3{font-size:8px;font-weight:500;color:#8A9AB0;letter-spacing:3px;margin-top:3px;text-transform:uppercase;}
+      .cert-presented-to{font-size:11px;font-weight:600;letter-spacing:2px;color:#8A9AB0;text-transform:uppercase;margin-bottom:8px;}
+      .cert-name{font-size:36px;font-weight:800;color:#0D182A;letter-spacing:-0.5px;line-height:1.15;margin-bottom:4px;}
+      .cert-role{font-size:15px;color:#294262;margin-bottom:28px;font-weight:500;}
+      .cert-statement{font-size:13px;color:#5A6A80;line-height:1.7;margin-bottom:32px;max-width:540px;border-left:3px solid #00A0D2;padding-left:16px;}
+      .cert-scores-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
+      .cert-score-box{background:#F7F9FC;border:1px solid #E2E8F0;border-radius:10px;padding:16px 10px;text-align:center;}
+      .cert-score-box.highlight{background:#0D182A;border-color:#0D182A;}
+      .cert-score-num{font-size:32px;font-weight:800;line-height:1;margin-bottom:4px;}
+      .cert-score-box.highlight .cert-score-num{color:#FFFFFF;}
+      .cert-score-lbl{font-size:9px;font-weight:600;letter-spacing:1px;color:#8A9AB0;text-transform:uppercase;line-height:1.4;}
+      .cert-score-box.highlight .cert-score-lbl{color:rgba(255,255,255,0.55);}
+      .cert-divider{height:1px;background:linear-gradient(90deg,#E2E8F0,#00A0D2,#E2E8F0);margin-bottom:24px;opacity:0.5;}
+      .cert-footer-row{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;}
+      .cert-footer-left{font-size:11px;color:#8A9AB0;line-height:1.6;}
+      .cert-footer-left strong{color:#294262;display:block;font-size:12px;margin-bottom:2px;}
+      .cert-photo{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #E2E8F0;}
+      .cert-seal{width:52px;height:52px;border-radius:50%;background:#0D182A;display:flex;align-items:center;justify-content:center;}
+      .cert-seal-s{font-size:12px;font-weight:800;color:#fff;letter-spacing:1px;}
+      .print-btn{display:block;margin:20px auto;padding:11px 28px;background:#0D182A;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+      @media print{.print-btn{display:none;}}
+    </style></head><body>
+    ${certHTML}
+    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+    </body></html>`);
+  win.document.close();
+  setTimeout(() => win.focus(), 300);
+}
+
+function restart(){
+  answers=new Array(QS.length).fill(null);cur=0;participant={};
+  ["f-name","f-desig","f-company"].forEach(id=>document.getElementById(id).value="");
+  ["f-ind","f-stage"].forEach(id=>document.getElementById(id).value="");
+  show("sec-intake");
+}
 </script>
 </body>
 </html>
